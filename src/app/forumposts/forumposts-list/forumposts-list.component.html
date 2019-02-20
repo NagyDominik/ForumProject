@@ -1,0 +1,21 @@
+<div>
+  <mat-card>
+    <mat-card-header>
+      <mat-card-subtitle>{{forumpost.userName}} {{forumpost.postDate}}</mat-card-subtitle>
+      <mat-card-title>{{forumpost.title}}</mat-card-title>
+    </mat-card-header>
+    <img mat-card-image [src]="{{forumpost.imgURL}}" *ngIf="forumpost.imgURL" alt="Missing Image">
+    <mat-card-content>
+      <p>
+        {{forumpost.description}}
+      </p>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-icon-button>
+        <mat-icon>thumb_up</mat-icon>
+      </button>
+      <button mat-button>Share</button>
+      <button mat-button>Favorite</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
