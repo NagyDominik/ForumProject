@@ -1,6 +1,18 @@
-<form [formGroup]="fileFormGroup" (ngSubmit)="addFile()">
+<div>
+  <form [formGroup]="PostForm" (ngSubmit)="addFile()">
 
-  <input type="file" (change)="uploadFile($event)">
+    <mat-form-field appearance="outline">
+      <input matInput placeholder="Title" formControlName="title">
+    </mat-form-field>
 
-  <button type="submit">Add</button>
-</form>
+    <mat-form-field appearance="outline">
+      <textarea matInput placeholder="Text (optional)" formControlName="description"></textarea>
+    </mat-form-field>
+
+    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
+    <input hidden (change)="setUploadFile($event)" #fileInput type="file">
+
+  </form>
+
+  <button mat-raised-button (click)="post()">Post</button>
+</div>

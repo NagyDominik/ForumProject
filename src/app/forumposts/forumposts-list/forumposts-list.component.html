@@ -4,7 +4,7 @@
       <mat-card-subtitle>{{forumpost.userName}} {{forumpost.postDate}}</mat-card-subtitle>
       <mat-card-title>{{forumpost.title}}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image [src]="{{forumpost.imgURL}}" *ngIf="forumpost.imgURL" alt="Missing Image">
+    <img mat-card-image [src]="forumpost.imgURL" *ngIf="forumpost.imgURL" alt="Missing Image">
     <mat-card-content>
       <p>
         {{forumpost.description}}

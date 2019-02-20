@@ -4,7 +4,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { ForumpostCreateComponent } from './forumpost-create/forumpost-create.component';
 import { ForumpostsRoutingModule } from './forumposts-routing.module';
 import { ForumpostsListComponent } from './forumposts-list/forumposts-list.component';
-import { MatCardModule, MatIconModule } from '@angular/material';
+import { MatCardModule, MatIconModule, MatFormFieldModule, MatInputModule, MatButtonModule } from '@angular/material';
 
 @NgModule({
   declarations: [ForumpostCreateComponent, ForumpostsListComponent],
@@ -14,6 +14,10 @@ import { MatCardModule, MatIconModule } from '@angular/material';
     ForumpostsRoutingModule,
     MatCardModule,
     MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    
   ]
 })
 export class ForumpostsModule { }
