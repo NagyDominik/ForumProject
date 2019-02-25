@@ -7,14 +7,14 @@ const routes: Routes = [
     loadChildren: './users/users.module#UsersModule'
   },
   {
-    path: 'forumposts',
+    path: '',
     loadChildren: './forumposts/forumposts.module#ForumpostsModule'
   },
-  {
+  /*{
     path: '',
     redirectTo: '',
     pathMatch: 'full'
-  }
+  }*/
 ];
 
 @NgModule({

@@ -1,5 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Forumpost } from '../shared/forumpost.model';
+import { ForumpostsService } from '../shared/forumposts.service';
+import { tap } from 'rxjs/operators';
+import { FileService } from 'src/app/files/shared/file.service';
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-forumposts-list',
@@ -8,11 +13,22 @@ import { Forumpost } from '../shared/forumpost.model';
 })
 export class ForumpostsListComponent implements OnInit {
 
-  forumpost: Forumpost;
+  forumposts: Observable<Forumpost[]>;
 
-  constructor() { }
+  constructor(private fps: ForumpostsService, private fs: FileService) { }
 
   ngOnInit() {
+    this.forumposts = this.fps.getAllPosts().pipe(
+      tap(posts => {
+        posts.forEach(post => {
+          if (post.imgID) {
+            this.fs.getFileUrl(post.imgID).subscribe(url => {
+              post.imgUrl = url;
+            })
+          }
+        })
+      })
+    )
   }
 
 }

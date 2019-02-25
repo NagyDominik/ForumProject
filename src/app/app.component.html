@@ -1,1 +1,8 @@
-<router-outlet></router-outlet>
+<div fxLayout="column" class="mat-app-background" fxFlex="100">
+    <div fxFlex="50px" fxFlex.md="45px" fxFlex.sm="130px" fxFlex.xs="130px" class="navbar" fxLayout="column" fxLayoutAlign="center">
+        <app-navbar></app-navbar>
+    </div>
+    <div fxLayout="column" fxFlex="auto">
+        <router-outlet></router-outlet>
+    </div>
+</div>

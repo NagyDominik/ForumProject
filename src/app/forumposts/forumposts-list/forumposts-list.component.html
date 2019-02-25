@@ -1,7 +1,7 @@
-<div>
-  <mat-card>
+<div *ngIf="forumposts">
+  <mat-card *ngFor="let forumpost of forumposts | async">
     <mat-card-header>
-      <mat-card-subtitle>{{forumpost.userName}} {{forumpost.postDate}}</mat-card-subtitle>
+      <mat-card-subtitle>{{forumpost.postDate | date:'d MMMM, yyyy hh:mm'}}</mat-card-subtitle>
       <mat-card-title>{{forumpost.title}}</mat-card-title>
     </mat-card-header>
     <img mat-card-image [src]="forumpost.imgURL" *ngIf="forumpost.imgURL" alt="Missing Image">

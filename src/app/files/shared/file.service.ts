@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, from } from 'rxjs';
+import { Observable, from, defer } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators'
 import { FileMeta } from './file-meta.model';
 import { AngularFireStorage } from '@angular/fire/storage';
@@ -37,7 +37,7 @@ export class FileService {
   }
 
   createFileMeta(metadata: FileMeta) {
-    return from(
+    return defer( () =>
       this.db.collection<FileMeta>('files').add(metadata)
     ).pipe(
       map(metaRef => {
@@ -46,4 +46,9 @@ export class FileService {
       })
     )
   }
+
+  getFileUrl(imgID: string): Observable<any> {
+    return this.storage.ref('forumpost-pictures/' + imgID).getDownloadURL();
+  }
+
 }

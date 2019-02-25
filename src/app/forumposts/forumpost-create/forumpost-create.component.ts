@@ -33,10 +33,11 @@ export class ForumpostCreateComponent implements OnInit {
     if (this.fileToUpload) {
       this.fs.upload(this.fileToUpload).subscribe(picture => {
         post.imgID = picture.id;
+        this.fps.createPost(post);
       });
+    } else {
+      this.fps.createPost(post);
     }
-    debugger
-    this.fps.createPost(post);
   }
 
   uploadFile() {

@@ -7,10 +7,13 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
+import { NavbarComponent } from './shared/navbar/navbar.component';
+import { MatButtonModule, MatMenuModule, MatIconModule, MatIconRegistry } from '@angular/material';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    NavbarComponent
   ],
   imports: [
     BrowserModule,
@@ -19,6 +22,9 @@ import { environment } from 'src/environments/environment';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule,
     AngularFireStorageModule,
+    MatButtonModule,
+    MatMenuModule,
+    MatIconModule,
 
   ],
   providers: [],
