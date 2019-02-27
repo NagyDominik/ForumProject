@@ -18,17 +18,22 @@ export class ForumpostsListComponent implements OnInit {
   constructor(private fps: ForumpostsService, private fs: FileService) { }
 
   ngOnInit() {
-    this.forumposts = this.fps.getAllPosts().pipe(
-      tap(posts => {
-        posts.forEach(post => {
-          if (post.imgID) {
-            this.fs.getFileUrl(post.imgID).subscribe(url => {
-              post.imgUrl = url;
-            })
-          }
+    //debugger
+    this.forumposts = this.fps.getAllPosts()
+      .pipe(tap(posts => {
+          posts.forEach(post => {
+            //debugger
+            if (post.pictureID) {
+              //debugger
+              this.fs.getFileUrl(post.pictureID)
+                .subscribe(url => {
+                  post.pictureUrl = url;
+                  console.log(url)
+                })
+            }
+          })
         })
-      })
-    )
+      )
   }
 
 }

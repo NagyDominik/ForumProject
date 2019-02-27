@@ -18,7 +18,7 @@ export class ForumpostCreateComponent implements OnInit {
 
   fileToUpload: File;
 
-  constructor(private fs: FileService, private fps: ForumpostsService) { }
+  constructor(private fps: ForumpostsService) { }
 
   ngOnInit() {
   }
@@ -29,20 +29,7 @@ export class ForumpostCreateComponent implements OnInit {
 
   post() {
     let post: Forumpost = this.PostForm.value;
-    post.postDate = Date.now();
-    if (this.fileToUpload) {
-      this.fs.upload(this.fileToUpload).subscribe(picture => {
-        post.imgID = picture.id;
-        this.fps.createPost(post);
-      });
-    } else {
-      this.fps.createPost(post);
-    }
+    this.fps.createPost(post, this.fileToUpload)
   }
 
-  uploadFile() {
-    this.fs.upload(this.fileToUpload).subscribe(picture => {
-      window.alert('File upload was successful!');
-    });
-  }
 }

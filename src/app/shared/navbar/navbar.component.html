@@ -1,13 +1,14 @@
-<div fxFlex="60vw" class="row" fxLayout="row" class="navbar" fxLayoutAlign="center" fxLayoutGap="50px">
+<div fxLayout="row">
   <!--<div fxLayoutAlign="center" fxFlex="13vw">
     <img src="assets/logo.png" alt="logo" width="100%" height="100%" routerLink="/">
   </div>-->
-  <div fxLayoutGap="20px" fxFlex="60vw" fxLayoutAlign="end">
-    <button mat-button class="navBarButton" routerLink="forumposts"></button>
+  <div fxFlex="50">
+    <button mat-button class="navBarButton" routerLink="">Forum</button>
+    <button mat-button class="navBarButton" routerLink="create">New post</button>
   </div>
 
-  <div fxLayoutAlign="end" fxFlex="25vw">
-    <label class="mat-body-strong" fxLayoutAlign="center center">User</label>
+  <div fxFlex="50" fxLayoutAlign="end center">
+    <label class="mat-body-strong">User</label>
 
     <button *ngIf="false" mat-button class="login navBarButton" routerLink="login">Login</button>
     <button mat-button *ngIf="true" id="userMenu" [matMenuTriggerFor]="userProfile" class="profileMenu">

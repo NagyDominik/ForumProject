@@ -2,7 +2,7 @@ export interface Forumpost {
     id?: string;
     title: string;
     description?: string;
-    imgID?: string;
-    imgUrl?: string;
+    pictureID?: string;
+    pictureUrl?: string;
     postDate: number;
 }

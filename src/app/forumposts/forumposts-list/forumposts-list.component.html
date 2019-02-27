@@ -1,20 +1,20 @@
 <div *ngIf="forumposts">
-  <mat-card *ngFor="let forumpost of forumposts | async">
+  <mat-card *ngFor="let post of forumposts | async">
     <mat-card-header>
-      <mat-card-subtitle>{{forumpost.postDate | date:'d MMMM, yyyy hh:mm'}}</mat-card-subtitle>
-      <mat-card-title>{{forumpost.title}}</mat-card-title>
+      <mat-card-subtitle>{{post.postDate | date:'d MMMM, yyyy hh:mm'}}</mat-card-subtitle>
+      <mat-card-title>{{post.title}}</mat-card-title>
     </mat-card-header>
-    <img mat-card-image [src]="forumpost.imgURL" *ngIf="forumpost.imgURL" alt="Missing Image">
     <mat-card-content>
-      <p>
-        {{forumpost.description}}
+      <p *ngIf="post.description">
+        {{post.description}}
       </p>
+      <img mat-card-image [src]="post.pictureUrl" *ngIf="post.pictureUrl" style="width: 300px; height: 300px;">
     </mat-card-content>
     <mat-card-actions>
       <button mat-icon-button>
         <mat-icon>thumb_up</mat-icon>
       </button>
-      <button mat-button>Share</button>
+      <button mat-button>Share</button> 
       <button mat-button>Favorite</button>
     </mat-card-actions>
   </mat-card>

@@ -8,7 +8,8 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { environment } from 'src/environments/environment';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { MatButtonModule, MatMenuModule, MatIconModule, MatIconRegistry } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule, MatMenuModule, MatIconModule } from '@angular/material';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { MatButtonModule, MatMenuModule, MatIconModule, MatIconRegistry } from '
     NavbarComponent
   ],
   imports: [
+    FlexLayoutModule,
     BrowserModule,
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -25,7 +27,6 @@ import { MatButtonModule, MatMenuModule, MatIconModule, MatIconRegistry } from '
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
-
   ],
   providers: [],
   bootstrap: [AppComponent]
