@@ -3,6 +3,7 @@ import { FileService } from 'src/app/files/shared/file.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-forumpost-create',
@@ -18,7 +19,9 @@ export class ForumpostCreateComponent implements OnInit {
 
   fileToUpload: File;
 
-  constructor(private fps: ForumpostsService) { }
+  constructor(private fps: ForumpostsService,
+              private router: Router,
+              private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -28,8 +31,9 @@ export class ForumpostCreateComponent implements OnInit {
   }
 
   post() {
-    let post: Forumpost = this.PostForm.value;
-    this.fps.createPost(post, this.fileToUpload)
+    const post: Forumpost = this.PostForm.value;
+    this.fps.createPost(post, this.fileToUpload);
+    this.router.navigate(['../'], {relativeTo: this.activatedRoute});
   }
 
 }

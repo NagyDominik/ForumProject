@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, from, defer } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators'
+import { map, switchMap } from 'rxjs/operators';
 import { FileMeta } from './file-meta.model';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -66,7 +66,7 @@ export class FileService {
         metadata.id = metaRef.id;
         return metadata;
       })
-    )
+    );
   }
 
   getFileUrl(pictureID: string): Observable<any> {
@@ -74,7 +74,6 @@ export class FileService {
   }
 
   imgBlobtoFile() {
-    
   }
 
 }
