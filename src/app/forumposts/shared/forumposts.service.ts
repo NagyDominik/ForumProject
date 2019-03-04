@@ -22,7 +22,7 @@ export class ForumpostsService {
       postProcessed.description = post.description;
 
     if (file) {
-      this.fs.uploadPostImage(file).subscribe(picture => {
+      this.fs.uploadImage(file, 'forum').subscribe(picture => {
         postProcessed.pictureID = picture.id;
         return this.createForumDBEntry(postProcessed)
       });

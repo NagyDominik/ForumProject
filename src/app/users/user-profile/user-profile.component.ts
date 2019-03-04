@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { FileService } from 'src/app/files/shared/file.service';
+import { UserService } from '../shared/user.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -10,10 +11,11 @@ import { FileService } from 'src/app/files/shared/file.service';
 export class UserProfileComponent implements OnInit {
 
   imageChangedEvent: any = '';
+  fileBeforeCrop: File;
   croppedImage: any = '';
   croppedBlob: Blob;
 
-  constructor() { }
+  constructor(private us: UserService) { }
 
   ngOnInit() {
   }
@@ -23,7 +25,11 @@ export class UserProfileComponent implements OnInit {
     this.croppedBlob = event.file;
   }
 
-  uploadFile(event) {
-    this.imageChangedEvent = event;
+  loadFile(event) {
+    this.fileBeforeCrop = event.file;
+  }
+
+  uploadFile() {
+    this.us.uploadProfileImage(this.croppedBlob, this.fileBeforeCrop.type, this.fileBeforeCrop.name).subscribe();
   }
 }
