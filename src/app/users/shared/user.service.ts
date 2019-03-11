@@ -5,6 +5,7 @@ import { FileMeta } from 'src/app/files/shared/file-meta.model';
 import { switchMap, map } from 'rxjs/operators';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from './user.model';
+import { Local } from 'protractor/built/driverProviders';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +14,11 @@ export class UserService {
 
   constructor(private fs: FileService, private db: AngularFirestore) { }
 
-  createUser(user: User): Observable<User> {
+  createUser(user?: User): Observable<User> {
     return from(this.db.collection('users').add(
       {
-        username: user.username,
-        regDate: Date.now()
+        username: "DefaultUser",
+        regDate: new Date(Date.now()).toISOString()
       }
     )
     ).pipe(
@@ -29,18 +30,9 @@ export class UserService {
   }
 
   uploadProfileImage(blob: Blob, type: string, name: string): Observable<FileMeta> {
-    /*if (blob) {
-      const fileToUpload = new File([blob], name, {type: type});
-      return this.fs.uploadImage(fileToUpload, 'profile')
-      .pipe(
-        switchMap(pic => {
-          if(this.db.collection.) {
-            return from(this.db.collection('users').add())
-          }
-        });
-      )
-    }*/
-    return undefined;
+      const fileToUpload = new File([blob], name, { type: type });
+      return this.fs.uploadImage(fileToUpload, "profile");
+      
   }
 
 }
