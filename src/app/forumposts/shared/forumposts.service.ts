@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Forumpost } from './forumpost.model';
 import { Observable, from } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { map, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
 @Injectable({
@@ -15,7 +15,7 @@ export class ForumpostsService {
   createPost(post: Forumpost, file: File): Observable<Forumpost> {
     let postProcessed: Forumpost = {
       title: post.title,
-      postDate: Date.now()
+      postDate: new Date(Date.now()).toISOString()
     };
 
     if (post.description)
@@ -32,6 +32,20 @@ export class ForumpostsService {
   }
 
   getAllPosts(): Observable<Forumpost[]> {
+    return this.getPostsList()
+      .pipe(tap(posts => {
+        posts.forEach(post => {
+          if (post.pictureID) {
+            this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
+                post.pictureUrl = url;
+                console.log(url);
+              })
+          }
+        })
+      }))
+  }
+
+  getPostsList() {
     return this.db.collection<Forumpost>('forumposts', ref => ref.orderBy('postDate', 'desc'))
       .snapshotChanges()
       .pipe(
@@ -45,8 +59,9 @@ export class ForumpostsService {
             }
             if (data.description)
               post.description = data.description;
-            if (data.pictureID)
+            if (data.pictureID) {
               post.pictureID = data.pictureID;
+            }
             return post;
           })
         })

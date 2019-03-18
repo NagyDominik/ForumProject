@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
 import { UserService } from '../shared/user.service';
+import { User } from '../shared/user.model';
 
 @Component({
   selector: 'app-user-profile',
@@ -9,6 +10,7 @@ import { UserService } from '../shared/user.service';
 })
 export class UserProfileComponent implements OnInit {
 
+  currentUser: User;
   imageChangedEvent: any = '';
   croppedImage: any = '';
   croppedBlob: Blob;
@@ -16,6 +18,9 @@ export class UserProfileComponent implements OnInit {
   constructor(private us: UserService) { }
 
   ngOnInit() {
+    this.us.getProfileImage('1ffKvrnr7lj4Gu0TzpBE').subscribe(result => {
+      this.currentUser = result;
+    });
   }
 
   imageCropped(event: ImageCroppedEvent) {

@@ -17,7 +17,6 @@ import { MatCardModule, MatIconModule, MatFormFieldModule, MatInputModule, MatBu
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
-    
   ]
 })
 export class ForumpostsModule { }

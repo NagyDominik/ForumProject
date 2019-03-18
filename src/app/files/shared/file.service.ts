@@ -12,10 +12,10 @@ export class FileService {
 
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
 
-  uploadImage(file: File, type: string): Observable<FileMeta> {
+  uploadImage(file: File, location: string): Observable<FileMeta> {
     const uid = this.db.createId();
     return defer(() =>
-        this.storage.ref(type == 'forum' ? 'forumpost-pictures/' : 'profile-pictures/' + uid)
+        this.storage.ref(this.createPath(location, uid))
         .put(file, {
           customMetadata: {
             originalName: file.name
@@ -30,8 +30,19 @@ export class FileService {
       );
   }
 
-  getFileUrl(pictureID: string): Observable<any> {
-    return this.storage.ref('forumpost-pictures/' + pictureID).getDownloadURL();
+  getFileUrl(pictureID: string, location: string): Observable<any> {
+    return this.storage.ref(this.createPath(location, pictureID)).getDownloadURL();
+  }
+
+  createPath(location: string, objname: string): string {
+    switch(location) {
+      case "forum": {
+        return 'forumpost-pictures/'+ objname;
+      }
+      case "profile": {
+        return 'profile-pictures/'+ objname;
+      }
+    }
   }
 
 }

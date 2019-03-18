@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FileService } from 'src/app/files/shared/file.service';
 import { FormGroup, FormControl } from '@angular/forms';
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
