@@ -1,10 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
-import { UserProfileComponent } from './user-profile.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { UserService } from '../shared/user.service';
 import { Observable, of } from 'rxjs';
+
 import { User } from '../shared/user.model';
+import { UserService } from '../shared/user.service';
+import { UserProfileComponent } from './user-profile.component';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
@@ -15,9 +17,14 @@ describe('UserProfileComponent', () => {
       declarations: [UserProfileComponent],
       imports: [
         ImageCropperModule,
+        ReactiveFormsModule,
+        MatSnackBarModule
       ],
       providers: [
         { provide: UserService, useValue: new USMock() },
+        // { provide: Router, useValue: Router },
+        // { provide: ActivatedRoute, useValue: ActivatedRoute },
+        { provide: MatSnackBar, useValue: MatSnackBar },
       ]
     })
       .compileComponents();
@@ -37,11 +44,11 @@ describe('UserProfileComponent', () => {
     expect(component.currentUser).toBeDefined();
     expect(component.currentUser.username).toBe('testUser');
   });
-  
+
 });
 
 class USMock {
-  getProfileImage(): Observable<User> {
+  getUserWithProfilePic(): Observable<User> {
     return of(
       {
         id: 'fuiwehfvsdhgfoew',

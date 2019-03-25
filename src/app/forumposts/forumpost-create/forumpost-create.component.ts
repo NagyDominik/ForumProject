@@ -19,8 +19,8 @@ export class ForumpostCreateComponent implements OnInit {
   fileToUpload: File;
 
   constructor(private fps: ForumpostsService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute) { }
+    private router: Router,
+    private activatedRoute: ActivatedRoute) { }
 
   ngOnInit() {
   }
@@ -32,7 +32,7 @@ export class ForumpostCreateComponent implements OnInit {
   post() {
     const post: Forumpost = this.PostForm.value;
     this.fps.createPost(post, this.fileToUpload);
-    this.router.navigate(['../'], {relativeTo: this.activatedRoute});
+    this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 
 }

@@ -35,12 +35,12 @@ export class FileService {
   }
 
   createPath(location: string, objname: string): string {
-    switch(location) {
-      case "forum": {
-        return 'forumpost-pictures/'+ objname;
+    switch (location) {
+      case 'forum': {
+        return 'forumpost-pictures/' + objname;
       }
-      case "profile": {
-        return 'profile-pictures/'+ objname;
+      case 'profile': {
+        return 'profile-pictures/' + objname;
       }
     }
   }

@@ -13,18 +13,19 @@ export class ForumpostsService {
   constructor(private db: AngularFirestore, private fs: FileService) { }
 
   createPost(post: Forumpost, file: File): Observable<Forumpost> {
-    let postProcessed: Forumpost = {
+    const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
     };
 
-    if (post.description)
+    if (post.description) {
       postProcessed.description = post.description;
+    }
 
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
         postProcessed.pictureID = picture.id;
-        return this.createForumDBEntry(postProcessed)
+        return this.createForumDBEntry(postProcessed);
       });
     } else {
       return this.createForumDBEntry(postProcessed);
@@ -39,10 +40,10 @@ export class ForumpostsService {
             this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
                 post.pictureUrl = url;
                 console.log(url);
-              })
+              });
           }
-        })
-      }))
+        });
+      }));
   }
 
   getPostsList() {
@@ -52,20 +53,21 @@ export class ForumpostsService {
         map(dcActions => {
           return dcActions.map(dcAction => {
             const data = dcAction.payload.doc.data() as Forumpost;
-            let post: Forumpost = {
+            const post: Forumpost = {
               id: dcAction.payload.doc.id,
               title: data.title,
               postDate: data.postDate
-            }
-            if (data.description)
+            };
+            if (data.description) {
               post.description = data.description;
+            }
             if (data.pictureID) {
               post.pictureID = data.pictureID;
             }
             return post;
-          })
+          });
         })
-      )
+      );
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
@@ -75,7 +77,7 @@ export class ForumpostsService {
           post.id = postRef.id;
           return post;
         })
-      )
+      );
   }
 
 }

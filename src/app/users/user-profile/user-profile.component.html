@@ -3,7 +3,7 @@
   <img *ngIf="!croppedImage && currentUser" [src]="currentUser.profilePicUrl" class="roundImage">
   <h2>User</h2>
 </div>
-<input type="file" (change)="loadFile($event)" accept="image/*">
+<input type="file" (change)="loadFile($event)" accept="image/*" [formControl]="fileInput">
 
 <button (click)="uploadFile()">Save</button>
 

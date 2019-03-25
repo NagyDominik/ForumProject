@@ -1,10 +1,10 @@
-import { TestBed, async } from '@angular/core/testing';
+import { async, TestBed } from '@angular/core/testing';
+import { MatButtonModule, MatIconModule, MatMenuModule } from '@angular/material';
 import { RouterTestingModule } from '@angular/router/testing';
+
+import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { AppRoutingModule } from './app-routing.module';
-import { MatButtonModule, MatMenuModule, MatIconModule } from '@angular/material';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
