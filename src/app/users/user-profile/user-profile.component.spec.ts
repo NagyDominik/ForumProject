@@ -7,6 +7,7 @@ import { Observable, of } from 'rxjs';
 import { User } from '../shared/user.model';
 import { UserService } from '../shared/user.service';
 import { UserProfileComponent } from './user-profile.component';
+import { By } from '@angular/platform-browser';
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent;
@@ -43,6 +44,17 @@ describe('UserProfileComponent', () => {
   it('should have currentUser defined', () => {
     expect(component.currentUser).toBeDefined();
     expect(component.currentUser.username).toBe('testUser');
+  });
+
+  it('should call uploadFile once', () => {
+    spyOn(component, 'uploadFile');
+    const buttons = fixture.debugElement.queryAll(By.css('button'));
+    buttons.forEach(btn => {
+      if (btn.nativeElement.textContent === 'Save') {
+        btn.nativeElement.click();
+      }
+    });
+    expect(component.uploadFile).toHaveBeenCalledTimes(1);
   });
 
 });
