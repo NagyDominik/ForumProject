@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { FileService } from 'src/app/files/shared/file.service';
+
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
-import { FileService } from 'src/app/files/shared/file.service';
-import { Observable } from 'rxjs';
-
 
 @Component({
   selector: 'app-forumposts-list',

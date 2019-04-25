@@ -65,10 +65,10 @@ class FPSMock {
           postDate: new Date(Date.now()).toISOString()
         }
       ]
-    )
+    );
   }
 }
 
 class FSMock {
-  
+
 }
