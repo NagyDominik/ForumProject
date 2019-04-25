@@ -12,42 +12,37 @@ export class FileService {
 
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
 
-  uploadImage(fileToUpload: File, type: string): Observable<FileMeta> {
-    return this.createFileMeta(
-      {
-        type: fileToUpload.type,
-        name: fileToUpload.name,
-        lastChanged: fileToUpload.lastModified,
-        size: fileToUpload.size
+  uploadImage(file: File, location: string): Observable<FileMeta> {
+    const uid = this.db.createId();
+    return defer(() =>
+        this.storage.ref(this.createPath(location, uid))
+        .put(file, {
+          customMetadata: {
+            originalName: file.name
+          }
+        })
+        .then()
+      ).pipe(
+        map(fileRef => {
+          fileRef.id = uid;
+          return fileRef;
+        })
+      );
+  }
+
+  getFileUrl(pictureID: string, location: string): Observable<any> {
+    return this.storage.ref(this.createPath(location, pictureID)).getDownloadURL();
+  }
+
+  createPath(location: string, objname: string): string {
+    switch (location) {
+      case 'forum': {
+        return 'forumpost-pictures/' + objname;
       }
-    ).pipe(
-      switchMap(metaDataWithId => {
-        return from(this.storage
-          .ref(type == 'forum' ? 'forumpost-pictures/' : 'profile-pictures/' + metaDataWithId.id)
-          .put(fileToUpload)
-          .then())
-          .pipe(
-            map(() => {
-              return metaDataWithId;
-            })
-          );
-      })
-    );
-  }
-
-  createFileMeta(metadata: FileMeta) {
-    return defer( () =>
-      this.db.collection<FileMeta>('files').add(metadata)
-    ).pipe(
-      map(metaRef => {
-        metadata.id = metaRef.id;
-        return metadata;
-      })
-    );
-  }
-
-  getFileUrl(pictureID: string): Observable<any> {
-    return this.storage.ref('forumpost-pictures/' + pictureID).getDownloadURL();
+      case 'profile': {
+        return 'profile-pictures/' + objname;
+      }
+    }
   }
 
 }
