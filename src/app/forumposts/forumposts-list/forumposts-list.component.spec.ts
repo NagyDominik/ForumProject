@@ -91,7 +91,6 @@ describe('ForumpostsListComponent', () => {
 */
 });
 
-
 class Helper {
   forumposts: Forumpost[] = [];
 
@@ -104,3 +103,4 @@ class Helper {
     return of(this.forumposts);
   }
 }
+
