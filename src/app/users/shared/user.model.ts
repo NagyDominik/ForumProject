@@ -1,7 +1,7 @@
 export interface User {
     id?: string;
     username: string;
-    regDate: Date;
+    regDate: string;
     profilePicUrl?: string;
     profilePicId?: string;
 }
