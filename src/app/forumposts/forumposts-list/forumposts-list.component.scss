@@ -7,7 +7,7 @@ img {
 }
 
 .card-container {
-    padding-top: 25px;
+    padding: 25px 0;
 }
 
 mat-card-header {
@@ -16,6 +16,7 @@ mat-card-header {
 
 mat-card {
     max-height: 700px;
+    padding-bottom: 10px;
 }
 
 .mat-card-image {
@@ -23,9 +24,17 @@ mat-card {
 }
 
 .mat-card-content {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 .mat-card-actions {
-    padding: 0px;
+    padding: 0;
+}
+
+.mat-caption {
+    margin: 0;
+}
+
+.mat-card-subtitle {
+    margin-bottom: 8px;
 }
