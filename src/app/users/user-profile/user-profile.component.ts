@@ -1,9 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatSnackBar } from '@angular/material';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
-
-import { User } from '../shared/user.model';
+import { FileService } from 'src/app/files/shared/file.service';
 import { UserService } from '../shared/user.service';
 
 @Component({
@@ -13,23 +10,14 @@ import { UserService } from '../shared/user.service';
 })
 export class UserProfileComponent implements OnInit {
 
-  currentUser: User;
   imageChangedEvent: any = '';
+  fileBeforeCrop: File;
   croppedImage: any = '';
   croppedBlob: Blob;
-  fileInput = new FormControl('');
 
-  constructor(private us: UserService,
-    private snackBar: MatSnackBar) { }
+  constructor(private us: UserService) { }
 
   ngOnInit() {
-    this.getCurrentUser();
-  }
-
-  getCurrentUser() {
-    this.us.getUserWithProfilePic('1ffKvrnr7lj4Gu0TzpBE').subscribe(result => {
-      this.currentUser = result;
-    });
   }
 
   imageCropped(event: ImageCroppedEvent) {
@@ -38,19 +26,10 @@ export class UserProfileComponent implements OnInit {
   }
 
   loadFile(event) {
-    this.imageChangedEvent = event;
+    this.fileBeforeCrop = event.file;
   }
 
   uploadFile() {
-    const fileBeforeCrop = this.imageChangedEvent.target.files[0];
-    this.us.uploadProfileImage(this.croppedBlob, 'image/png', fileBeforeCrop.name).subscribe(() => {
-      this.getCurrentUser();
-      this.imageChangedEvent = '';
-      this.croppedImage = '';
-      this.fileInput.reset();
-      this.snackBar.open('Profile picture has been updated!', 'OK', {
-        duration: 3000,
-      })
-    });
+    this.us.uploadProfileImage(this.croppedBlob, this.fileBeforeCrop.type, this.fileBeforeCrop.name).subscribe();
   }
 }

@@ -4,5 +4,5 @@ export interface Forumpost {
     description?: string;
     pictureID?: string;
     pictureUrl?: string;
-    postDate: string;
+    postDate: number;
 }

@@ -1,9 +1,7 @@
-<div>
-  <img *ngIf="croppedImage" [src]="croppedImage" class="roundImage">
-  <img *ngIf="!croppedImage && currentUser" [src]="currentUser.profilePicUrl" class="roundImage">
+<div><img *ngIf="croppedImage" [src]="croppedImage" style="width: 128px; height: 128px;float: left;border-radius: 50%">
   <h2>User</h2>
 </div>
-<input type="file" (change)="loadFile($event)" accept="image/*" [formControl]="fileInput">
+<input type="file" (change)="loadFile($event)" accept="image/*">
 
 <button (click)="uploadFile()">Save</button>
 
