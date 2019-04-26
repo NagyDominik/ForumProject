@@ -17,6 +17,7 @@ export class ForumpostCreateComponent implements OnInit {
   });
 
   fileToUpload: File;
+  imgURL: any;
 
   constructor(private fps: ForumpostsService,
     private router: Router,
@@ -31,6 +32,11 @@ export class ForumpostCreateComponent implements OnInit {
 
   setUploadFile(event) {
     this.fileToUpload = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileToUpload);
+    reader.onload = () => {
+      this.imgURL = reader.result;
+    };
   }
 
   post() {

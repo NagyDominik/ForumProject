@@ -36,3 +36,10 @@ textarea {
 button[color=accent] {
     font-weight: bold
 }
+
+.preview {
+    margin-top: 2px;
+    max-height: 190px;
+    max-width: 100%;
+    object-fit: contain;
+}

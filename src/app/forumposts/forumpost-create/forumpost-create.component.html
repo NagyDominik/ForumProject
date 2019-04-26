@@ -38,6 +38,11 @@
                   <button type="button" color="primary" mat-raised-button (click)="fileInput.click()">Upload</button>
                   <input hidden (change)="setUploadFile($event)" #fileInput type="file">
                 </div>
+
+                <div *ngIf="fileToUpload">
+                  <img [src]="imgURL" (click)="fileInput.click()" class="preview">
+                  <input hidden (change)="setUploadFile($event)" #fileInput type="file">
+                </div>
               </div>
 
             </div>
