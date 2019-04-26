@@ -38,3 +38,8 @@ mat-card {
 .mat-card-subtitle {
     margin-bottom: 8px;
 }
+
+.mat-button, .matbutton-ripple, .mat-button-focus-overlay {
+    padding: 0 6px;
+    min-width: 0px;
+}
