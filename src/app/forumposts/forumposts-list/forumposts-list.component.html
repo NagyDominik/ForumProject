@@ -1,21 +1,40 @@
-<div *ngIf="forumposts">
-  <mat-card *ngFor="let post of forumposts | async">
-    <mat-card-header>
-      <mat-card-subtitle>{{post.postDate | date:'d MMMM, yyyy hh:mm'}}</mat-card-subtitle>
-      <mat-card-title>{{post.title}}</mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-      <p *ngIf="post.description">
-        {{post.description}}
-      </p>
-      <img mat-card-image [src]="post.pictureUrl" *ngIf="post.pictureUrl" style="width: 300px; height: 300px;">
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-icon-button>
-        <mat-icon>thumb_up</mat-icon>
-      </button>
-      <button mat-button>Share</button> 
-      <button mat-button>Favorite</button>
-    </mat-card-actions>
-  </mat-card>
+<div fxLayoutAlign="center" class="main-container">
+  <div class="card-container" *ngIf="forumposts" fxLayout="column" fxLayoutAlign="center" fxLayoutGap="15px"
+    fxFlex="40">
+    <mat-card *ngFor="let post of forumposts | async">
+
+      <mat-card-header>
+        <mat-card-subtitle>
+          <p class="mat-caption">{{post.postDate | date:'d MMMM, yyyy hh:mm'}}</p>
+        </mat-card-subtitle>
+        <mat-card-title fxLayout="row">{{post.title}}</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <p *ngIf="post.description">
+          {{post.description}}
+        </p>
+        <div fxLayoutAlign="center center">
+          <img [src]="post.pictureUrl" *ngIf="post.pictureUrl">
+        </div>
+      </mat-card-content>
+
+      <mat-card-actions fxLayoutGap="0px">
+        <button mat-icon-button>
+          <mat-icon>thumb_up</mat-icon>
+        </button>
+        <button mat-button>Commnets</button>
+        <button mat-button>Share</button>
+        <button mat-icon-button [matMenuTriggerFor]="moreMenu">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </mat-card-actions>
+
+    </mat-card>
+  </div>
 </div>
+
+<mat-menu #moreMenu="matMenu">
+  <button mat-menu-item>Edit</button>
+  <button mat-menu-item>Delete</button>
+</mat-menu>

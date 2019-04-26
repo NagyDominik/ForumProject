@@ -1,0 +1,44 @@
+img {
+    object-fit: contain;
+    max-width: 100%;
+    min-width: 150px;
+    max-height: 500px;
+}
+
+.main-container {
+    background-color: #E0E0E0;
+}
+
+.card-container {
+    padding: 25px 0;
+}
+
+mat-card-header {
+    margin-left: -16px;
+}
+
+mat-card {
+    max-height: 700px;
+    padding-bottom: 10px;
+}
+
+.mat-card-content {
+    margin-bottom: 0;
+}
+
+.mat-card-actions {
+    padding: 0;
+}
+
+.mat-caption {
+    margin: 0;
+}
+
+.mat-card-subtitle {
+    margin-bottom: 8px;
+}
+
+.mat-button, .matbutton-ripple, .mat-button-focus-overlay {
+    padding: 0 6px;
+    min-width: 0px;
+}

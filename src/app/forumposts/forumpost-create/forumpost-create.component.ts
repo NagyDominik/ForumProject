@@ -19,6 +19,7 @@ export class ForumpostCreateComponent implements OnInit {
   });
 
   fileToUpload: File;
+  imgURL: any;
 
   constructor(private fps: ForumpostsService,
     private store: Store,
@@ -28,8 +29,17 @@ export class ForumpostCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  clear() {
+    this.PostForm.reset();
+  }
+
   setUploadFile(event) {
     this.fileToUpload = event.target.files[0];
+    const reader = new FileReader();
+    reader.readAsDataURL(this.fileToUpload);
+    reader.onload = () => {
+      this.imgURL = reader.result;
+    };
   }
 
   post() {
