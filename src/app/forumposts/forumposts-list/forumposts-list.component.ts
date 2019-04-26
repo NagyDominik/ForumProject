@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
-import { FileService } from 'src/app/files/shared/file.service';
-
 import { Forumpost } from '../shared/forumpost.model';
-import { ForumpostsService } from '../shared/forumposts.service';
+import { Observable } from 'rxjs';
+import { Store } from '@ngxs/store';
+import { LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
+
 
 @Component({
   selector: 'app-forumposts-list',
@@ -12,12 +12,16 @@ import { ForumpostsService } from '../shared/forumposts.service';
 })
 export class ForumpostsListComponent implements OnInit {
 
-  forumposts: Observable<Forumpost[]>;
+  forumposts: Observable<Forumpost>;
 
-  constructor(private fps: ForumpostsService, private fs: FileService) { }
+  // constructor(private fps: ForumpostsService, private fs: FileService) { }
+
+  constructor(private store: Store) {
+    this.store.dispatch(new LoadForumPosts());
+    this.forumposts = this.store.select(state => state.forumposts.forumposts);
+}
 
   ngOnInit() {
-    this.forumposts = this.fps.getAllPosts();
   }
 
 }

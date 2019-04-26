@@ -13,6 +13,7 @@ export class ForumpostsService {
   constructor(private db: AngularFirestore, private fs: FileService) { }
 
   createPost(post: Forumpost, file: File): Observable<Forumpost> {
+    debugger;
     const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
@@ -25,7 +26,9 @@ export class ForumpostsService {
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
         postProcessed.pictureID = picture.id;
-        return this.createForumDBEntry(postProcessed);
+        const stuff = this.createForumDBEntry(postProcessed);
+        debugger;
+        return stuff;
       });
     } else {
       return this.createForumDBEntry(postProcessed);
@@ -71,13 +74,17 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-    return from(this.db.collection('forumposts').add(post))
+      const stuff = from(this.db.collection('forumposts').add(post))
       .pipe(
         map(postRef => {
           post.id = postRef.id;
           return post;
         })
       );
+      debugger;
+      return stuff;
   }
 
 }
+
+
