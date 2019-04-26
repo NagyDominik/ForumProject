@@ -25,10 +25,10 @@ export class ForumpostsService {
 
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
+        console.log('Picture: ', picture);
         postProcessed.pictureID = picture.id;
-        const stuff = this.createForumDBEntry(postProcessed);
-        debugger;
-        return stuff;
+        console.log('Processed post: ', postProcessed);
+        return this.createForumDBEntry(postProcessed);
       });
     } else {
       return this.createForumDBEntry(postProcessed);
@@ -42,7 +42,6 @@ export class ForumpostsService {
           if (post.pictureID) {
             this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
                 post.pictureUrl = url;
-                console.log(url);
               });
           }
         });
@@ -74,15 +73,14 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      const stuff = from(this.db.collection('forumposts').add(post))
-      .pipe(
+      console.log('post: ', post);
+      return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
+          console.log('postRef: ', postRef);
           return post;
         })
       );
-      debugger;
-      return stuff;
   }
 
 }
