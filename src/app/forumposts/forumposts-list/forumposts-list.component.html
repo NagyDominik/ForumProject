@@ -14,7 +14,9 @@
         <p *ngIf="post.description">
           {{post.description}}
         </p>
-        <img mat-card-image [src]="post.pictureUrl" *ngIf="post.pictureUrl">
+        <div fxLayoutAlign="center center">
+          <img [src]="post.pictureUrl" *ngIf="post.pictureUrl">
+        </div>
       </mat-card-content>
 
       <mat-card-actions fxLayoutGap="0px">

@@ -1,18 +1,55 @@
-<div>
-  <form [formGroup]="PostForm" (ngSubmit)="addFile()">
+<div fxLayoutAlign="center start" class="main-container">
+  <div class="sub-container" fxLayoutAlign="center" fxFlex="40" fxLayout="column">
+    <form [formGroup]="PostForm" (ngSubmit)="addFile()" fxLayout="column">
 
-    <mat-form-field appearance="outline">
-      <input matInput placeholder="Title" formControlName="title">
-    </mat-form-field>
+      <mat-tab-group animationDuration="0ms" (selectedTabChange)="clear()">
 
-    <mat-form-field appearance="outline">
-      <textarea matInput placeholder="Text (optional)" formControlName="description"></textarea>
-    </mat-form-field>
+        <mat-tab label="Text">
+          <ng-template matTabContent>
 
-    <button type="button" mat-raised-button (click)="fileInput.click()">Choose File</button>
-    <input hidden (change)="setUploadFile($event)" #fileInput type="file">
+            <div fxLayout="column">
 
-  </form>
+              <mat-form-field appearance="outline" class="titlefield">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="" formControlName="title">
+              </mat-form-field>
 
-  <button mat-raised-button (click)="post()">Post</button>
+              <mat-form-field appearance="outline" class="textarea">
+                <mat-label>Text</mat-label>
+                <textarea matInput placeholder="" formControlName="description"></textarea>
+              </mat-form-field>
+
+            </div>
+          </ng-template>
+        </mat-tab>
+
+        <mat-tab label="Picture">
+          <ng-template matTabContent>
+
+            <div fxLayout="column" class="titlefield">
+
+              <mat-form-field appearance="outline">
+                <mat-label>Title</mat-label>
+                <input matInput placeholder="" formControlName="title">
+              </mat-form-field>
+
+              <div fxLayoutAlign="center center" class="pictureUpload">
+                <div *ngIf="!fileToUpload">
+                  <button type="button" color="primary" mat-raised-button (click)="fileInput.click()">Upload</button>
+                  <input hidden (change)="setUploadFile($event)" #fileInput type="file">
+                </div>
+              </div>
+
+            </div>
+          </ng-template>
+        </mat-tab>
+
+      </mat-tab-group>
+
+      <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="60px">
+        <button mat-raised-button color="accent" fxFlex="50" (click)="post()">Post</button>
+        <button mat-raised-button fxFlex="50" (click)="back()">Cancel</button>
+      </div>
+    </form>
+  </div>
 </div>

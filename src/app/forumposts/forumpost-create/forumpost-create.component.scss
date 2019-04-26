@@ -1,0 +1,38 @@
+.main-container {
+    background-color: #E0E0E0;
+    min-height: 94.5vh;
+}
+
+.sub-container {
+    padding: 25px 0;
+}
+
+.mat-tab-group {
+    min-height: 400px;
+}
+
+textarea {
+    border-radius: 8px;
+    height: 150px;
+}
+
+.pictureUpload {
+    height: 200px;
+    border: dashed rgba(0, 0, 0, 0.12);
+    border-width: 2px;
+    border-radius: 8px;
+}
+
+.pictureUpload:hover {
+    border: dashed rgba(0, 0, 0, 0.87);
+    border-width: 2px;
+    transition: 0.5s;
+}
+
+.titlefield {
+    padding-top: 5px
+}
+
+button[color=accent] {
+    font-weight: bold
+}

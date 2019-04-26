@@ -1,5 +1,8 @@
 img {
-    object-fit:contain;
+    object-fit: contain;
+    max-width: 100%;
+    min-width: 150px;
+    max-height: 500px;
 }
 
 .main-container {
@@ -17,10 +20,6 @@ mat-card-header {
 mat-card {
     max-height: 700px;
     padding-bottom: 10px;
-}
-
-.mat-card-image {
-    max-height: 500px;
 }
 
 .mat-card-content {

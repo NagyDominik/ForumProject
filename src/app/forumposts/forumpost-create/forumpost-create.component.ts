@@ -25,6 +25,10 @@ export class ForumpostCreateComponent implements OnInit {
   ngOnInit() {
   }
 
+  clear() {
+    this.PostForm.reset();
+  }
+
   setUploadFile(event) {
     this.fileToUpload = event.target.files[0];
   }
@@ -32,6 +36,10 @@ export class ForumpostCreateComponent implements OnInit {
   post() {
     const post: Forumpost = this.PostForm.value;
     this.fps.createPost(post, this.fileToUpload);
+    this.back();
+  }
+
+  back() {
     this.router.navigate(['../'], { relativeTo: this.activatedRoute });
   }
 
