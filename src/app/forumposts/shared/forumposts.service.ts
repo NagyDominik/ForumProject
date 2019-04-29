@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Forumpost } from './forumpost.model';
 import { Observable, from } from 'rxjs';
-import { map, tap } from 'rxjs/operators';
+import {map, switchMap, tap} from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
 @Injectable({
@@ -80,6 +80,28 @@ export class ForumpostsService {
       );
   }
 
+
+  deletePost(id: string): Observable<Forumpost> {
+    return this.db.doc<Forumpost>('forumposts/' + id)
+      .get().pipe(
+        switchMap(postDocument => {
+          if (!postDocument || !postDocument.data()) {
+            throw new Error('Post not found');
+          } else {
+            return from(
+              this.db.doc<Forumpost>('forumposts/' + id)
+                .delete()
+            ).pipe(
+              map(() => {
+                const data = postDocument.data() as Forumpost;
+                data.id = postDocument.id;
+                return data;
+              })
+            );
+          }
+        })
+      );
+  }
 }
 
 
