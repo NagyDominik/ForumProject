@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
+import { Store } from '@ngxs/store';
+import { AddForumPost } from 'src/app/store/actions/forumposts.actions';
 
 @Component({
   selector: 'app-forumpost-create',
@@ -21,7 +23,7 @@ export class ForumpostCreateComponent implements OnInit, AfterViewInit {
   fileToUpload: File;
   imgURL: any;
 
-  constructor(private fps: ForumpostsService,
+  constructor(private store: Store,
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private snackBar: MatSnackBar,
@@ -57,7 +59,8 @@ export class ForumpostCreateComponent implements OnInit, AfterViewInit {
   post() {
     const post: Forumpost = this.PostForm.value;
     if ((post.title != null && post.title !== '') && (this.fileToUpload == null || this.fileToUpload.type.includes('image'))) {
-      this.fps.createPost(post, this.fileToUpload);
+      const file = this.fileToUpload;
+      this.store.dispatch(new AddForumPost({post, file}));
       this.back();
     } else {
       this.snackBar.open('Cannot create post without title', 'OK', {

@@ -1,6 +1,5 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
@@ -24,7 +23,6 @@ import { ForumpostsRoutingModule } from './forumposts-routing.module';
     CommonModule,
     ReactiveFormsModule,
     ForumpostsRoutingModule,
-    FlexLayoutModule,
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,

@@ -39,7 +39,6 @@ export class ForumpostsService {
           if (post.pictureID) {
             this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
                 post.pictureUrl = url;
-                console.log(url);
               });
           }
         });
@@ -71,13 +70,16 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-    return from(this.db.collection('forumposts').add(post))
-      .pipe(
+      console.log('post: ', post);
+      return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
+          console.log('postRef: ', postRef);
           return post;
         })
       );
   }
 
 }
+
+
