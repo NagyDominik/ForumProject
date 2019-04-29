@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ImageCroppedEvent } from 'ngx-image-cropper';
@@ -17,7 +17,7 @@ export class UserProfileComponent implements OnInit {
   imageChangedEvent: any = '';
   croppedImage: any = '';
   croppedBlob: Blob;
-  fileInput = new FormControl('');
+  fileToUpload: File;
 
   constructor(private us: UserService,
     private snackBar: MatSnackBar) { }
@@ -41,16 +41,27 @@ export class UserProfileComponent implements OnInit {
     this.imageChangedEvent = event;
   }
 
+  setUploadFile(event) {
+    if (event.target.files[0].type.includes('image')) {
+      this.fileToUpload = event.target.files[0];
+      this.loadFile(event);
+    } else {
+      this.snackBar.open('Only image files are accepted', 'OK', {
+        duration: 3000
+      });
+    }
+  }
+
   uploadFile() {
     const fileBeforeCrop = this.imageChangedEvent.target.files[0];
     this.us.uploadProfileImage(this.croppedBlob, 'image/png', fileBeforeCrop.name).subscribe(() => {
       this.getCurrentUser();
       this.imageChangedEvent = '';
       this.croppedImage = '';
-      this.fileInput.reset();
+      this.fileToUpload = null;
       this.snackBar.open('Profile picture has been updated!', 'OK', {
         duration: 3000,
-      })
+      });
     });
   }
 }

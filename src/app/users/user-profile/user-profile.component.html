@@ -1,15 +1,22 @@
-<div>
-  <img *ngIf="croppedImage" [src]="croppedImage" class="roundImage">
-  <img *ngIf="!croppedImage && currentUser" [src]="currentUser.profilePicUrl" class="roundImage">
-  <h2>User</h2>
-</div>
-<input type="file" (change)="loadFile($event)" accept="image/*" [formControl]="fileInput">
+<div fxLayoutAlign="center" class="main-container">
+  <div *ngIf="currentUser" class="card-container mat-elevation-z2" fxLayout="column"
+    fxLayoutAlign="space-between center" fxLayoutGap="15px" fxFlex="40">
+    <div fxLayoutAlign="center center" fxLayout="column">
+      <div class="image-container" (click)="this.fileInput.click()">
+        <img *ngIf="croppedImage" [src]="croppedImage" class="roundImage image">
+        <img *ngIf="!croppedImage && currentUser" [src]="currentUser.profilePicUrl" class="roundImage">
+        <div class="overlay" fxLayoutAlign="center center">
+          <div class="mat-h2">Upload image</div>
+        </div>
+      </div>
 
-<button (click)="uploadFile()">Save</button>
+      <div class="mat-h1">{{currentUser.username}}</div>
+    </div>
+    <image-cropper *ngIf="imageChangedEvent" style="max-width: 512px; max-height: 512px;float:left;"
+      [imageChangedEvent]="imageChangedEvent" format="png" (imageCropped)="imageCropped($event)" [aspectRatio]="1/1"
+      [resizeToWidth]="128" [onlyScaleDown]="true" [cropperMinWidth]="128" [roundCropper]="true"></image-cropper>
 
-<div>
-  <image-cropper style="width: 512px; height: 512px;float:left;" [imageChangedEvent]="imageChangedEvent" format="png"
-    (imageCropped)="imageCropped($event)" [aspectRatio]="1/1" [resizeToWidth]="128" [onlyScaleDown]="true"
-    [cropperMinWidth]="128" [roundCropper]="true"></image-cropper>
-
+    <button mat-raised-button color="primary" (click)="uploadFile()">Save changes</button>
+    <input hidden type="file" (change)="loadFile($event)" accept="image/*" #fileInput>
+  </div>
 </div>
