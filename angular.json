@@ -27,8 +27,7 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss",
-              "src/mat-theme.scss"
+              "src/styles.scss"
             ],
             "scripts": []
           },
@@ -84,8 +83,7 @@
             "tsConfig": "src/tsconfig.spec.json",
             "karmaConfig": "src/karma.conf.js",
             "styles": [
-              "src/styles.scss",
-              "src/mat-theme.scss"
+              "src/styles.scss"
             ],
             "scripts": [],
             "assets": [
