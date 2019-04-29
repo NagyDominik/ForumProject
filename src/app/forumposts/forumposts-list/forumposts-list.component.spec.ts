@@ -1,10 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ForumpostsListComponent } from './forumposts-list.component';
-import {MatCardModule, MatIconModule, MatButtonModule, MatMenuModule} from '@angular/material';
-import { Observable, of } from 'rxjs';
-import { ForumpostsService } from '../shared/forumposts.service';
 
-import {DOMHelper} from '../../../testing/dom-helper';
+import { MatButtonModule, MatCardModule, MatIconModule, MatMenuModule } from '@angular/material';
+import { of } from 'rxjs';
+
+import { DOMHelper } from '../../../testing/dom-helper';
+import { ForumpostsService } from '../shared/forumposts.service';
+import { ForumpostsListComponent } from './forumposts-list.component';
+
 
 
 describe('ForumpostsListComponent', () => {
@@ -65,4 +67,5 @@ describe('ForumpostsListComponent', () => {
           expect(component.deleteForumPost).toHaveBeenCalledTimes(1);
         });*/
   }));
-  });
+});
+
