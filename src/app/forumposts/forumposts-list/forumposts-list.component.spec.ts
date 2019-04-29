@@ -1,10 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ForumpostsListComponent } from './forumposts-list.component';
-import { MatCardModule, MatIconModule, MatButtonModule } from '@angular/material';
+import {MatCardModule, MatIconModule, MatButtonModule, MatMenuModule} from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
-import {DOMHelper} from '../../testing/dom-helper';
+import {DOMHelper} from '../../../testing/dom-helper';
 
 describe('ForumpostsListComponent', () => {
   let component: ForumpostsListComponent;
@@ -21,6 +21,7 @@ describe('ForumpostsListComponent', () => {
         MatCardModule,
         MatIconModule,
         MatButtonModule,
+        MatMenuModule
       ],
       providers: [
         { provide: ForumpostsService, useValue:  forumPostServiceMock }

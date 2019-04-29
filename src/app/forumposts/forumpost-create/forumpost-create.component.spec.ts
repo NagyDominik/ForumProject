@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule, MatFormFieldModule, MatInputModule } from '@angular/material';
+import {MatButtonModule, MatFormFieldModule, MatInputModule, MatMenuModule, MatMenuTrigger, MatTabsModule} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -23,9 +23,11 @@ describe('ForumpostCreateComponent', () => {
         MatFormFieldModule,
         MatInputModule,
         MatButtonModule,
+        MatTabsModule,
+        MatMenuModule
       ],
       providers: [
-        { provide: ForumpostsService, useValue: new FPSMock() },
+        { provide: ForumpostsService, useValue: FPSMock },
         { provide: Router, useValue: Router },
         { provide: ActivatedRoute, useValue: ActivatedRoute },
       ]

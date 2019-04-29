@@ -2,10 +2,11 @@ import { TestBed, getTestBed } from '@angular/core/testing';
 
 import { ForumpostsService } from './forumposts.service';
 import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {Observable, of} from 'rxjs';
+import {from, Observable, of} from 'rxjs';
 import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
 import { FileService } from 'src/app/files/shared/file.service';
-import {Forumpost} from './forumpost.model';
+import {map} from 'rxjs/operators';
+
 
 describe('ForumpostsService', () => {
   let angularFirestoreMock: any;
@@ -17,7 +18,7 @@ describe('ForumpostsService', () => {
   beforeEach(() => {
     helper = new Helper();
     angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection']);
-    fsCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges']);
+    fsCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges', 'add']);
     angularFirestoreMock.collection.and.returnValue(fsCollectionMock);
     fsCollectionMock.snapshotChanges.and.returnValue(of([]));
     fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload']);
@@ -70,6 +71,45 @@ describe('ForumpostsService', () => {
     });
   });
 
+  describe('getForumPosts return value', () => {
+    it('should be call getAllForumPosts and return a single post ', () => {
+      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
+      service.getAllPosts().subscribe(post => {
+        expect(post.length).toBe(1);
+      });
+    });
+
+    it('should be call getAllForumPosts and return 10 posts ', () => {
+      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
+      service.getAllPosts().subscribe(post => {
+        expect(post.length).toBe(10);
+      });
+    });
+
+    it('should be call getPostList and return 10 posts ', () => {
+      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
+      service.getPostsList().subscribe(post => {
+        expect(post.length).toBe(10);
+      });
+    });
+    it('should be call getPostList and return 10 posts ', () => {
+      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
+      service.getPostsList().subscribe(post => {
+        expect(post.length).toBe(1);
+      });
+    });
+  });
+
+  describe('createPost', () => {
+    /*this shit is not working*/
+    it('createPost should be called once ', post => {
+      expect(service.createPost(post, null))
+        .toBe({id: 'asdasd', postDate: 'asdasdas', title: 'asd'});
+
+
+    });
+  });
+
   /*it('should be call getForumPosts and return a post with correct properties', () => {
     fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
     service.getAllPosts().subscribe(posts => {
@@ -77,46 +117,30 @@ describe('ForumpostsService', () => {
         id: 'abc0',
         title: 'asd0',
         postDate: 'date0'
+      });
     });
   });*/
 });
 
+  class Helper {
+    actions: any[] = [];
 
-  /*describe('getForumPosts return value', () => {
-    it('should be call getForumPosts and return a single post ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
-      service.createPost().subscribe(post => {
-        expect(post.length).toBe(1);
-      });
-    });
-  });
-
-  it('should be call getForumPosts and return 10 posts ', () => {
-    fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
-    service.getAllPosts().subscribe(post => {
-      expect(post.length).toBe(10);
-    });
-  });*/
-
-
-class Helper {
-  actions: any[] = [];
-  getActions(amount: number): Observable<any[]> {
-    for (let i = 0; i < amount; i++) {
-      this.actions.push({
-        payload: {
-          doc: {
-            id: 'abc' + i,
-            data: () => {
-              return {
-                title: 'asd' + i,
-                postDate: 'date' + i
-              };
+    getActions(amount: number): Observable<any[]> {
+      for (let i = 0; i < amount; i++) {
+        this.actions.push({
+          payload: {
+            doc: {
+              id: 'abc' + i,
+              data: () => {
+                return {
+                  title: 'asd' + i,
+                  postDate: 'date' + i
+                };
+              }
             }
           }
-        }
-      });
+        });
+      }
+      return of(this.actions);
     }
-    return of(this.actions);
   }
-}
