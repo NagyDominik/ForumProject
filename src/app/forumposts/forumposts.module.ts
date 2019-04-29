@@ -34,6 +34,7 @@ import { ForumpostsRoutingModule } from './forumposts-routing.module';
     MatMenuModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatSnackBarModule
   ]
 })
 export class ForumpostsModule { }
