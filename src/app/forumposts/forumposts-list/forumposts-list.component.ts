@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Forumpost } from '../shared/forumpost.model';
 import { Observable } from 'rxjs';
-import { Store } from '@ngxs/store';
+import { Select, Store } from '@ngxs/store';
 import { LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
+import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 
 
 @Component({
@@ -12,13 +13,10 @@ import { LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
 })
 export class ForumpostsListComponent implements OnInit {
 
-  forumposts: Observable<Forumpost>;
-
-  // constructor(private fps: ForumpostsService, private fs: FileService) { }
+  @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
 
   constructor(private store: Store) {
-    this.store.dispatch(new LoadForumPosts());
-    this.forumposts = this.store.select(state => state.forumposts.forumposts);
+     this.store.dispatch(new LoadForumPosts());
 }
 
   ngOnInit() {

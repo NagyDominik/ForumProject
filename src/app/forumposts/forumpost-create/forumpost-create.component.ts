@@ -21,8 +21,7 @@ export class ForumpostCreateComponent implements OnInit {
   fileToUpload: File;
   imgURL: any;
 
-  constructor(private fps: ForumpostsService,
-    private store: Store,
+  constructor(private store: Store,
     private router: Router,
     private activatedRoute: ActivatedRoute) { }
 

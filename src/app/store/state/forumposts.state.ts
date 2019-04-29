@@ -78,8 +78,9 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
-        debugger;
-        return this.fps.createPost(payload.post, payload.file).pipe(
+        const stuff = this.fps.createPost(payload.post, payload.file);
+        console.log('Output of createPost: ', stuff);
+        return stuff.pipe(
             map((post: Forumpost) =>
                 asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
             )),
@@ -103,5 +104,11 @@ export class ForumpostsState {
     @Action(forumpostsActions.AddForumPostFail)
     addForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPostFail) {
         // Notify the user that it failed?
+    }
+
+    // Delete forumposts
+
+    @Action(forumpostsActions.DeleteForumPost)
+    DeleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
     }
 }
