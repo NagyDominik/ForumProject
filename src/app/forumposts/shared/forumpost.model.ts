@@ -1,4 +1,4 @@
-export interface Forumpost {
+ export interface Forumpost {
     id?: string;
     title: string;
     description?: string;

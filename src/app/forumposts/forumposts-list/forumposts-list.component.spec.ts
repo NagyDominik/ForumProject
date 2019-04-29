@@ -4,7 +4,6 @@ import { MatCardModule, MatIconModule, MatButtonModule } from '@angular/material
 import { Observable, of } from 'rxjs';
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
-import {FileService} from '../../files/shared/file.service';
 import {DOMHelper} from '../../testing/dom-helper';
 
 describe('ForumpostsListComponent', () => {
@@ -12,13 +11,10 @@ describe('ForumpostsListComponent', () => {
   let fixture: ComponentFixture<ForumpostsListComponent>;
   let dh: DOMHelper<ForumpostsListComponent>;
   let forumPostServiceMock: any;
-  let fileServiceMock: any;
 
   beforeEach(async(() => {
     forumPostServiceMock = jasmine.createSpyObj('ForumpostsService', ['getAllPosts']);
     forumPostServiceMock.getAllPosts.and.returnValue(of([]));
-    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl']);
-    fileServiceMock.getFileUrl.and.returnValue('');
     TestBed.configureTestingModule({
       declarations: [ForumpostsListComponent],
       imports: [
@@ -27,7 +23,6 @@ describe('ForumpostsListComponent', () => {
         MatButtonModule,
       ],
       providers: [
-        { provide: FileService, useValue: fileServiceMock },
         { provide: ForumpostsService, useValue:  forumPostServiceMock }
       ]
     })
@@ -45,25 +40,9 @@ describe('ForumpostsListComponent', () => {
     expect(component).toBeTruthy();
   });
 
- /*it('should have forumposts defined from an observable', () => {
-    component.forumposts.subscribe(content => {
-      expect(content).toBeDefined();
-      expect(content.length).toBe(3);
-    });
-  });*/
-
- /* cypress test
-  it('should show one post if we have one item', () => {
-    component.forumposts = of([
-      {id: 'testID', title: 'testTitle', postDate: new Date(Date.now()).toISOString()}
-    ]);
-    fixture.detectChanges();
-    const  lissItem = fixture.debugElement
-      .queryAll(By.css('mat-card'));
-    expect(lissItem.length).toBe(1);
+  it('Should call getAllPosts on the ForumpostService one time on ngOnInit', ()=>{
+    expect(forumPostServiceMock.getAllPosts).toHaveBeenCalledTimes(1);
   });
-  */
-
 
 /*
   describe('Delete Products', () => {

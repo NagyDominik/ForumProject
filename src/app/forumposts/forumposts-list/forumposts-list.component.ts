@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { FileService } from 'src/app/files/shared/file.service';
 
 import { Forumpost } from '../shared/forumpost.model';
 import { ForumpostsService } from '../shared/forumposts.service';
@@ -14,7 +13,7 @@ export class ForumpostsListComponent implements OnInit {
 
   forumposts: Observable<Forumpost[]>;
 
-  constructor(private fps: ForumpostsService, private fs: FileService) { }
+  constructor(private fps: ForumpostsService) { }
 
   ngOnInit() {
     this.forumposts = this.fps.getAllPosts();
