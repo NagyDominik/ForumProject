@@ -16,6 +16,7 @@ import {
 import { ForumpostCreateComponent } from './forumpost-create/forumpost-create.component';
 import { ForumpostsListComponent } from './forumposts-list/forumposts-list.component';
 import { ForumpostsRoutingModule } from './forumposts-routing.module';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [ForumpostCreateComponent, ForumpostsListComponent],
@@ -23,6 +24,7 @@ import { ForumpostsRoutingModule } from './forumposts-routing.module';
     CommonModule,
     ReactiveFormsModule,
     ForumpostsRoutingModule,
+    FlexLayoutModule,
     MatCardModule,
     MatIconModule,
     MatFormFieldModule,
@@ -32,7 +34,6 @@ import { ForumpostsRoutingModule } from './forumposts-routing.module';
     MatMenuModule,
     MatTabsModule,
     MatSnackBarModule,
-
   ]
 })
 export class ForumpostsModule { }
