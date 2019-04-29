@@ -27,6 +27,10 @@
         <button mat-button>Share</button>
         <button mat-icon-button [matMenuTriggerFor]="moreMenu">
           <mat-icon>more_vert</mat-icon>
+          <mat-menu #moreMenu="matMenu">
+            <button mat-menu-item>Edit</button>
+            <button mat-menu-item (click)="deleteForumPost(post)">Delete</button>
+          </mat-menu>
         </button>
       </mat-card-actions>
 
@@ -34,7 +38,4 @@
   </div>
 </div>
 
-<mat-menu #moreMenu="matMenu">
-  <button mat-menu-item>Edit</button>
-  <button mat-menu-item>Delete</button>
-</mat-menu>
+

@@ -6,6 +6,7 @@ import { Select, Store } from '@ngxs/store';
 import { LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 import {ForumpostsService} from '../shared/forumposts.service';
+import {MatSnackBar} from '@angular/material';
 
 
 
@@ -17,7 +18,7 @@ import {ForumpostsService} from '../shared/forumposts.service';
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
-  constructor(private store: Store,private fps: ForumpostsService) {
+  constructor(private store: Store, private fps: ForumpostsService,  public snackBar: MatSnackBar) {
      this.store.dispatch(new LoadForumPosts());
 }
 
@@ -27,9 +28,14 @@ export class ForumpostsListComponent implements OnInit {
   deleteForumPost(forumPost: Forumpost) {
     const obs = this.fps.deletePost(forumPost.id);
     obs.subscribe(postFromFirebase => {
-      window.alert('post with id: ' + postFromFirebase.id + ' is deleted');
+      this.openSnackBar('post with title: ' + postFromFirebase.title + ' is deleted');
     }, error1 => {
-      window.alert('post not found with id: ' + forumPost.id);
+      this.openSnackBar('post not found with title: ' + forumPost.title);
+    });
+  }
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 2000,
     });
   }
 }

@@ -34,6 +34,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatMenuModule,
     MatTabsModule,
     MatSnackBarModule,
+    MatSnackBarModule
   ]
 })
 export class ForumpostsModule { }
