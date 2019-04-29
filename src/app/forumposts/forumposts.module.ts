@@ -11,6 +11,7 @@ import {
   MatMenuModule,
   MatRippleModule,
   MatTabsModule,
+  MatSnackBarModule,
 } from '@angular/material';
 
 import { ForumpostCreateComponent } from './forumpost-create/forumpost-create.component';
@@ -32,6 +33,8 @@ import { ForumpostsRoutingModule } from './forumposts-routing.module';
     MatRippleModule,
     MatMenuModule,
     MatTabsModule,
+    MatSnackBarModule,
+
   ]
 })
 export class ForumpostsModule { }

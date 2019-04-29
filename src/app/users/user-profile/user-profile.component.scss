@@ -1,6 +1,44 @@
 .roundImage {
-    width: 128px;
-    height: 128px;
-    float: left;
+    width: 300px;
+    height: 300px;
+    border: dashed 2px #2979FF;
     border-radius: 50%;
+}
+
+.main-container {
+    background-color: #E0E0E0;
+    min-height: 94.5vh;
+}
+
+.card-container {
+    margin: 30px 0 60px 0;
+    padding: 25px 0;
+    background: whitesmoke
+}
+
+.image-container {
+    position: relative;
+}
+
+.image-container:hover .overlay {
+    opacity: 0.65;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    transition: .1s ease;
+    background-color: #000000;
+    border:dashed #FF3D00;
+    border-radius: 50%;
+}
+
+.mat-h2 {
+    color: white;
 }

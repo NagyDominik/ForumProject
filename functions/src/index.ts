@@ -1,5 +1,5 @@
+import * as admin from 'firebase-admin';
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin'
 
 admin.initializeApp()
 
@@ -12,7 +12,7 @@ const createImageMeta = (name: string, fileMeta: object) => {
 
 const updateDefaultUser = (name: string) => {
     return admin.firestore().collection('users')
-        .doc('1ffKvrnr7lj4Gu0TzpBE') //DefaultUser ID, temporary stuff
+        .doc('1ffKvrnr7lj4Gu0TzpBE') //DefaultUser ID, temporary
         .update(
             {
                 profilePicId: name
@@ -37,7 +37,7 @@ exports.uploadImage = functions.storage.object().onFinalize((object) => {
                 type: object.contentType,
                 size: object.size
             };
-            const nameForDoc = object.name.split('/')[1]; // forumpost-pictures/xyz
+            const nameForDoc = object.name.split('/')[1]; //forumpost-pictures/xyz --> xyz
             await createImageMeta(nameForDoc, fileMeta);
             console.log('Image metadata has been created! ID: ' + nameForDoc)
 
@@ -45,7 +45,6 @@ exports.uploadImage = functions.storage.object().onFinalize((object) => {
             if (object.name && object.name.split('/')[0] === 'profile-pictures') {
                 storageResult = await updateDefaultUser(nameForDoc);
                 console.log('DefaultUser has been updated!')
-
             }
             resolve(storageResult);
         } else {
@@ -63,7 +62,7 @@ exports.deletePost = functions.firestore.document('forumposts/{ID}').onDelete((s
                     reject('File metadata could not be deleted: ' + error);
                 });
             console.log('File metadata has been deleted! ID: ' + deletedPost.pictureID);
-            
+
             try {
                 const restultFromStorage = await admin.storage()
                     .bucket().file('forumpost-pictures/' + deletedPost.pictureID)
@@ -83,7 +82,7 @@ exports.deletePost = functions.firestore.document('forumposts/{ID}').onDelete((s
 
 exports.deleteOldProfilePicture = functions.firestore.document('users/{userID}').onUpdate((change, context) => {
     return new Promise(async (resolve, reject) => {
-        if (change.before && change.before) {
+        if (change.before && change.before.data()) {
             const beforeData = change.before.data();
             try {
                 if (beforeData) {
