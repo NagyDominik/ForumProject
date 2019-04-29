@@ -1,5 +1,8 @@
 img {
-    object-fit:contain;
+    object-fit: contain;
+    max-width: 100%;
+    min-width: 150px;
+    max-height: 500px;
 }
 
 .main-container {
@@ -19,10 +22,6 @@ mat-card {
     padding-bottom: 10px;
 }
 
-.mat-card-image {
-    max-height: 500px;
-}
-
 .mat-card-content {
     margin-bottom: 0;
 }
@@ -37,4 +36,9 @@ mat-card {
 
 .mat-card-subtitle {
     margin-bottom: 8px;
+}
+
+.mat-button, .matbutton-ripple, .mat-button-focus-overlay {
+    padding: 0 6px;
+    min-width: 0px;
 }
