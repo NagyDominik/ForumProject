@@ -35,7 +35,7 @@
 
               <div fxLayoutAlign="center center" class="pictureUpload">
                 <div *ngIf="!fileToUpload">
-                  <button type="button" color="primary" mat-raised-button (click)="fileInput.click()">Upload</button>
+                  <button type="button" id="fileUploadBtn" color="primary" mat-raised-button (click)="fileInput.click()">Upload</button>
                   <input hidden (change)="setUploadFile($event)" #fileInput type="file" accept="image/*">
                 </div>
 
@@ -52,7 +52,7 @@
       </mat-tab-group>
 
       <div fxLayout="row" fxLayoutAlign="center" fxLayoutGap="60px">
-        <button mat-raised-button color="accent" fxFlex="50" (click)="post()">Post</button>
+        <button mat-raised-button id="postBtn" color="accent" fxFlex="50" (click)="post()">Post</button>
         <button mat-raised-button fxFlex="50" (click)="back()">Cancel</button>
       </div>
     </form>

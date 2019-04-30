@@ -1,10 +1,10 @@
-<div fxLayout="row">
+<div fxLayout="row" id="navBar">
   <!--<div fxLayoutAlign="center" fxFlex="13vw">
     <img src="assets/logo.png" alt="logo" width="100%" height="100%" routerLink="/">
   </div>-->
   <div fxFlex="45">
-    <button mat-button class="navBarButton" routerLink="">Forum</button>
-    <button mat-button class="navBarButton" routerLink="create">New post</button>
+    <button mat-button  id="forumPostListBtn" class="navBarButton" routerLink="">Forum</button>
+    <button mat-button id="createForumPostBtn" class="navBarButton" routerLink="create">New post</button>
   </div>
 
   <div fxFlex="10">
@@ -19,7 +19,7 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #userProfile="matMenu">
-      <button mat-menu-item routerLink="users/profile">My profile</button>
+      <button id="profileBtn" mat-menu-item routerLink="users/profile">My profile</button>
     </mat-menu>
   </div>
 </div>
