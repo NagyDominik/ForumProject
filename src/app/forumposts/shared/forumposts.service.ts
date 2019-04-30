@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Forumpost } from './forumpost.model';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
@@ -78,6 +78,11 @@ export class ForumpostsService {
           return post;
         })
       );
+  }
+
+  deletePost(post: Forumpost): Observable<Forumpost> {
+    console.log('Deleting post:', post);
+    return of(post);
   }
 
 }

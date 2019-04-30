@@ -1,5 +1,5 @@
 import { Forumpost } from 'src/app/forumposts/shared/forumpost.model';
-import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { State, Selector, Action, StateContext, Actions } from '@ngxs/store';
 import { AddForumPost } from '../actions/forumposts.actions';
 import { ForumpostsService } from 'src/app/forumposts/shared/forumposts.service';
 import * as forumpostsActions from '../actions/forumposts.actions';
@@ -18,6 +18,7 @@ export interface ForumpostsModel {
     name: 'forumposts',
     defaults: {
         forumposts: [],
+        // TODO: use these for something, or remove them
         loaded: false,
         loading: false,
         selectedPostID: null
@@ -78,9 +79,7 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
-        const stuff = this.fps.createPost(payload.post, payload.file);
-        console.log('Output of createPost: ', stuff);
-        return stuff.pipe(
+        return this.fps.createPost(payload.post, payload.file).pipe(
             map((post: Forumpost) =>
                 asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
             )),
@@ -109,6 +108,26 @@ export class ForumpostsState {
     // Delete forumposts
 
     @Action(forumpostsActions.DeleteForumPost)
-    DeleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
+    deleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
+        return this.fps.deletePost(payload).pipe(
+            map((post: Forumpost) =>
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.DeleteForumPostSuccess(post))
+            )),
+        catchError(error =>
+            of(
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.DeleteForumPostFail(error))
+            )
+            )
+        ));
+    }
+
+    @Action(forumpostsActions.DeleteForumPostSuccess)
+    deleteForumPostSuccess({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostSuccess) {
+        console.log('deleted post');
+    }
+
+    @Action(forumpostsActions.DeleteForumPostSuccess)
+    deleteForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
+
     }
 }
