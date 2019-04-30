@@ -28,12 +28,6 @@ export class ForumpostsListComponent implements OnInit {
 
   deleteForumPost(forumPost: Forumpost) {
     this.store.dispatch(new DeleteForumPost(forumPost));
-    /*const obs = this.fps.deletePost(forumPost.id);
-    obs.subscribe(postFromFirebase => {
-      this.openSnackBar('post with title: ' + postFromFirebase.title + ' is deleted');
-    }, error1 => {
-      this.openSnackBar('post not found with title: ' + forumPost.title);
-    });*/
   }
 
   openSnackBar(message: string) {

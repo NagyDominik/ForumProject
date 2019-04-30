@@ -4,7 +4,7 @@ import { AddForumPost } from '../actions/forumposts.actions';
 import { ForumpostsService } from 'src/app/forumposts/shared/forumposts.service';
 import * as forumpostsActions from '../actions/forumposts.actions';
 import { asapScheduler, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, filter } from 'rxjs/operators';
 
 export interface ForumpostsModel {
     forumposts: Forumpost[];
@@ -122,11 +122,13 @@ export class ForumpostsState {
     }
 
     @Action(forumpostsActions.DeleteForumPostSuccess)
-    deleteForumPostSuccess({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostSuccess) {
-        console.log('deleted post');
+    deleteForumPostSuccess({getState, setState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostSuccess) {
+        const state = getState();
+        const filtered = state.forumposts.filter(post => post.id !== payload.id);
+        setState({...state, forumposts: filtered});
     }
 
-    @Action(forumpostsActions.DeleteForumPostSuccess)
+    @Action(forumpostsActions.DeleteForumPostFail)
     deleteForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
 
     }
