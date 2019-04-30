@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Forumpost } from './forumpost.model';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
@@ -22,14 +22,18 @@ export class ForumpostsService {
       postProcessed.description = post.description;
     }
 
+    debugger;
+
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
+        console.log('Meta:', picture);
         postProcessed.pictureID = picture.id;
-        return this.createForumDBEntry(postProcessed);
+        console.log('Image uploaded', postProcessed);
       });
-    } else {
-      return this.createForumDBEntry(postProcessed);
     }
+
+    return this.createForumDBEntry(postProcessed);
+
   }
 
   getAllPosts(): Observable<Forumpost[]> {

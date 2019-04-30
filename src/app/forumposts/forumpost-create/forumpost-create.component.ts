@@ -2,11 +2,10 @@ import { AfterViewInit, ChangeDetectorRef, Component, OnInit } from '@angular/co
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
-
-import { Forumpost } from '../shared/forumpost.model';
-import { ForumpostsService } from '../shared/forumposts.service';
 import { Store } from '@ngxs/store';
 import { AddForumPost } from 'src/app/store/actions/forumposts.actions';
+
+import { Forumpost } from '../shared/forumpost.model';
 
 @Component({
   selector: 'app-forumpost-create',

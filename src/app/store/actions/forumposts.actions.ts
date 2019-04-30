@@ -39,7 +39,7 @@ export class AddForumPostFail {
 export class DeleteForumPost {
     static readonly type = '[Forumpost] Delete Forumpost';
 
-    constructor(public payload: number) {}
+    constructor(public payload: Forumpost) {}
 }
 
 

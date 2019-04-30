@@ -1,10 +1,10 @@
 import { Forumpost } from 'src/app/forumposts/shared/forumpost.model';
-import { State, Selector, Action, StateContext } from '@ngxs/store';
+import { State, Selector, Action, StateContext, Actions } from '@ngxs/store';
 import { AddForumPost } from '../actions/forumposts.actions';
 import { ForumpostsService } from 'src/app/forumposts/shared/forumposts.service';
 import * as forumpostsActions from '../actions/forumposts.actions';
 import { asapScheduler, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
+import { map, catchError, filter } from 'rxjs/operators';
 
 export interface ForumpostsModel {
     forumposts: Forumpost[];
@@ -18,6 +18,7 @@ export interface ForumpostsModel {
     name: 'forumposts',
     defaults: {
         forumposts: [],
+        // TODO: use these for something, or remove them
         loaded: false,
         loading: false,
         selectedPostID: null
@@ -78,18 +79,16 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
-        const stuff = this.fps.createPost(payload.post, payload.file);
-        console.log('Output of createPost: ', stuff);
-        return stuff.pipe(
-            map((post: Forumpost) =>
-                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
-            )),
-            catchError(error =>
-                of(
-                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
-                )
+        return this.fps.createPost(payload.post, payload.file).pipe(
+        map((post: Forumpost) =>
+            asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
+        )),
+        catchError(error =>
+            of(
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
             )
-            );
+        )
+        );
     }
 
     @Action(forumpostsActions.AddForumPostSuccess)
@@ -109,6 +108,28 @@ export class ForumpostsState {
     // Delete forumposts
 
     @Action(forumpostsActions.DeleteForumPost)
-    DeleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
+    deleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
+        return this.fps.deletePost(payload.id).pipe(
+            map((post: Forumpost) =>
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.DeleteForumPostSuccess(post))
+            )),
+        catchError(error =>
+            of(
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.DeleteForumPostFail(error))
+            )
+            )
+        ));
+    }
+
+    @Action(forumpostsActions.DeleteForumPostSuccess)
+    deleteForumPostSuccess({getState, setState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostSuccess) {
+        const state = getState();
+        const filtered = state.forumposts.filter(post => post.id !== payload.id);
+        setState({...state, forumposts: filtered});
+    }
+
+    @Action(forumpostsActions.DeleteForumPostFail)
+    deleteForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
+
     }
 }

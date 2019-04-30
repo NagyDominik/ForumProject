@@ -1,43 +1,49 @@
-import { TestBed, getTestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { getTestBed, TestBed, async } from '@angular/core/testing';
+import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { Observable, of } from 'rxjs';
+import { FileService } from 'src/app/files/shared/file.service';
 
 import { ForumpostsService } from './forumposts.service';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
-import {from, Observable, of} from 'rxjs';
-import { AngularFirestoreModule, AngularFirestore } from '@angular/fire/firestore';
-import { FileService } from 'src/app/files/shared/file.service';
-import {map} from 'rxjs/operators';
-
 
 describe('ForumpostsService', () => {
   let angularFirestoreMock: any;
   let fileServiceMock: any;
-  let fsCollectionMock: any;
+  let firestoreCollectionMock: any;
+  let firestoreDocMock: any;
   let httpMock: HttpTestingController;
   let service: ForumpostsService;
   let helper: Helper;
-  beforeEach(() => {
+
+  beforeEach(async(() => {
     helper = new Helper();
-    angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection']);
-    fsCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges', 'add']);
-    angularFirestoreMock.collection.and.returnValue(fsCollectionMock);
-    fsCollectionMock.snapshotChanges.and.returnValue(of([]));
-    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'upload']);
+    angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection', 'doc']);
+    firestoreCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges', 'add']);
+    firestoreDocMock = jasmine.createSpyObj('doc', ['get', 'delete']);
+
+    angularFirestoreMock.collection.and.returnValue(firestoreCollectionMock);
+    firestoreCollectionMock.snapshotChanges.and.returnValue(of([]));
+
+    angularFirestoreMock.doc.and.returnValue(firestoreDocMock);
+
+    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'uploadImage']);
+
     TestBed.configureTestingModule({
       imports: [
         AngularFirestoreModule,
         HttpClientTestingModule,
-
       ],
       providers: [
-        {provide: AngularFirestore, useValue: angularFirestoreMock},
-        {provide: FileService, useValue: fileServiceMock}
+        { provide: AngularFirestore, useValue: angularFirestoreMock },
+        { provide: FileService, useValue: fileServiceMock }
       ]
     });
+
     httpMock = getTestBed().get(HttpTestingController);
     service = TestBed.get(ForumpostsService);
-  });
+  }));
 
-  it('should be created', () => {
+  it('should create', () => {
     expect(service).toBeTruthy();
   });
 
@@ -51,96 +57,118 @@ describe('ForumpostsService', () => {
     });
 
     it('should call snapshotChanges 1 time on AngularFirestore service', () => {
-      expect(fsCollectionMock.snapshotChanges).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('getForumPosts return value', () => {
-    it('should be call getForumPosts and return a single post ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
-      service.getAllPosts().subscribe(post => {
-        expect(post.length).toBe(1);
-      });
-    });
-  });
-
-  it('should be call getForumPosts and return 10 posts ', () => {
-    fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
-    service.getAllPosts().subscribe(post => {
-      expect(post.length).toBe(10);
+      expect(firestoreCollectionMock.snapshotChanges).toHaveBeenCalledTimes(1);
     });
   });
 
   describe('getForumPosts return value', () => {
     it('should be call getAllForumPosts and return a single post ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
+      firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
       service.getAllPosts().subscribe(post => {
         expect(post.length).toBe(1);
       });
     });
 
     it('should be call getAllForumPosts and return 10 posts ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
+      firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
       service.getAllPosts().subscribe(post => {
         expect(post.length).toBe(10);
       });
     });
 
     it('should be call getPostList and return 10 posts ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
+      firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
       service.getPostsList().subscribe(post => {
         expect(post.length).toBe(10);
-      });
-    });
-    it('should be call getPostList and return 10 posts ', () => {
-      fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
-      service.getPostsList().subscribe(post => {
-        expect(post.length).toBe(1);
       });
     });
   });
 
   describe('createPost', () => {
-    /*this shit is not working*/
-    it('createPost should be called once ', post => {
-      expect(service.createPost(post, null))
-        .toBe({id: 'asdasd', postDate: 'asdasdas', title: 'asd'});
-
-
+    beforeEach(() => {
+      firestoreCollectionMock.add.and.returnValue(helper.getActions(1));
+      service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd', description: 'description' }, null).subscribe();
     });
+
+    it('should be called once ', () => {
+      expect(firestoreCollectionMock.add).toHaveBeenCalledTimes(1);
+    });
+
   });
 
-  /*it('should be call getForumPosts and return a post with correct properties', () => {
-    fsCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
-    service.getAllPosts().subscribe(posts => {
-      expect(posts[0]).toEqual({
-        id: 'abc0',
-        title: 'asd0',
-        postDate: 'date0'
-      });
+  describe('deletePost', () => {
+
+    it('should be called once ', () => {
+      firestoreDocMock.get.and.returnValue(helper.getActions(1));
+      service.deletePost('id');
+      expect(firestoreDocMock.get).toHaveBeenCalledTimes(1);
     });
-  });*/
+
+    it('should call firestore collection delete once', () => {
+      firestoreDocMock.get.and.returnValue(helper.getDocumentSnapshot(1));
+      firestoreDocMock.delete.and.returnValue(helper.getDocumentSnapshot(1));
+      service.deletePost('id').subscribe();
+      expect(firestoreDocMock.delete).toHaveBeenCalledTimes(1);
+    });
+
+    // Dunno how to catch the error
+    // it('should throw error if post cannot be found', () => {
+    //   firestoreDocMock.get.and.returnValue(helper.getDocumentSnapshot(0));
+    //   firestoreDocMock.delete.and.returnValue(helper.getDocumentSnapshot(1));
+    //   try {
+    //     service.deletePost('id').subscribe();
+    //   } catch (error) {
+    //     expect(error).toBe(new Error('Post not found'));
+    //   }
+    // });
+  });
+
 });
 
-  class Helper {
-    actions: any[] = [];
+class Helper {
+  actions: any[] = [];
+  docSnapshot: any;
 
-    getActions(amount: number): Observable<any[]> {
-      for (let i = 0; i < amount; i++) {
-        this.actions.push({
-          payload: {
-            doc: {
-              id: 'abc' + i,
-              data: () => {
-                return {
-                  title: 'asd' + i,
-                  postDate: 'date' + i
-                };
-              }
+  getActions(amount: number): Observable<any[]> {
+    for (let i = 0; i < amount; i++) {
+      this.actions.push({
+        payload: {
+          doc: {
+            id: 'abc' + i,
+            data: () => {
+              return {
+                title: 'asd' + i,
+                postDate: 'date' + i,
+                description: 'description',
+                // pictureID: 'picID'
+              };
             }
           }
-        });
-      }
-      return of(this.actions);
+        }
+      });
     }
+    return of(this.actions);
   }
+
+  getDocumentSnapshot(num: number): Observable<any[]> {
+    if (num === 0) {
+      this.docSnapshot = {
+        id: 'asdasdas',
+        data: () => {
+          return;
+        }
+      };
+    } else {
+      this.docSnapshot = {
+        id: 'asdasdas',
+        data: () => {
+          return {
+            title: 'asd',
+            postDate: 'date',
+          };
+        }
+      };
+    }
+    return of(this.docSnapshot);
+  }
+}
