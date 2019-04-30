@@ -3,10 +3,11 @@ import { Forumpost } from '../shared/forumpost.model';
 import { Observable } from 'rxjs';
 
 import { Select, Store } from '@ngxs/store';
-import { LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
+import { LoadForumPosts, DeleteForumPost } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 import {ForumpostsService} from '../shared/forumposts.service';
 import {MatSnackBar} from '@angular/material';
+import { post } from 'selenium-webdriver/http';
 
 
 
@@ -26,13 +27,9 @@ export class ForumpostsListComponent implements OnInit {
   }
 
   deleteForumPost(forumPost: Forumpost) {
-    const obs = this.fps.deletePost(forumPost.id);
-    obs.subscribe(postFromFirebase => {
-      this.openSnackBar('post with title: ' + postFromFirebase.title + ' is deleted');
-    }, error1 => {
-      this.openSnackBar('post not found with title: ' + forumPost.title);
-    });
+    this.store.dispatch(new DeleteForumPost(forumPost));
   }
+
   openSnackBar(message: string) {
     this.snackBar.open(message, 'OK', {
       duration: 2000,
