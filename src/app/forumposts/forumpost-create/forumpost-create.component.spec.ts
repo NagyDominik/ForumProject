@@ -1,14 +1,23 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
-import {MatButtonModule, MatFormFieldModule, MatInputModule, MatMenuModule, MatMenuTrigger, MatTabsModule} from '@angular/material';
+import {
+  MatButtonModule,
+  MatFormFieldModule,
+  MatInputModule,
+  MatMenuModule,
+  MatSnackBar,
+  MatSnackBarModule,
+  MatTabsModule,
+} from '@angular/material';
+import { By } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 
 import { Forumpost } from '../shared/forumpost.model';
-import { ForumpostsService } from '../shared/forumposts.service';
 import { ForumpostCreateComponent } from './forumpost-create.component';
-import { By } from '@angular/platform-browser';
+import { ChangeDetectorRef } from '@angular/core';
+import { Store } from '@ngxs/store';
 
 describe('ForumpostCreateComponent', () => {
   let component: ForumpostCreateComponent;
@@ -24,12 +33,15 @@ describe('ForumpostCreateComponent', () => {
         MatInputModule,
         MatButtonModule,
         MatTabsModule,
-        MatMenuModule
+        MatMenuModule,
+        MatSnackBarModule
       ],
       providers: [
-        { provide: ForumpostsService, useValue: FPSMock },
+        { provide: Store, useValue: FPSMock },
         { provide: Router, useValue: Router },
         { provide: ActivatedRoute, useValue: ActivatedRoute },
+        { provide: MatSnackBar, useValue: MatSnackBar },
+        { provide: ChangeDetectorRef, useValue: ChangeDetectorRef },
       ]
     }).compileComponents();
   }));
@@ -40,7 +52,7 @@ describe('ForumpostCreateComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should be created', () => {
     expect(component).toBeTruthy();
   });
 

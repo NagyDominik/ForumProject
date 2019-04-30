@@ -5,6 +5,7 @@ import { RouterTestingModule } from '@angular/router/testing';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+import { APP_BASE_HREF } from '@angular/common';
 
 describe('AppComponent', () => {
   beforeEach(async(() => {
@@ -20,6 +21,7 @@ describe('AppComponent', () => {
         AppComponent,
         NavbarComponent
       ],
+      providers: [{provide: APP_BASE_HREF, useValue : '/' }]
     }).compileComponents();
   }));
 

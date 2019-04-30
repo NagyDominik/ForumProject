@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Forumpost } from './forumpost.model';
-import { Observable, from } from 'rxjs';
+import { Observable, from, of } from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 

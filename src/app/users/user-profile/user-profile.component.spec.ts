@@ -23,8 +23,6 @@ describe('UserProfileComponent', () => {
       ],
       providers: [
         { provide: UserService, useValue: new USMock() },
-        // { provide: Router, useValue: Router },
-        // { provide: ActivatedRoute, useValue: ActivatedRoute },
         { provide: MatSnackBar, useValue: MatSnackBar },
       ]
     })
@@ -50,7 +48,7 @@ describe('UserProfileComponent', () => {
     spyOn(component, 'uploadFile');
     const buttons = fixture.debugElement.queryAll(By.css('button'));
     buttons.forEach(btn => {
-      if (btn.nativeElement.textContent === 'Save') {
+      if (btn.nativeElement.textContent === 'Save changes') {
         btn.nativeElement.click();
       }
     });
