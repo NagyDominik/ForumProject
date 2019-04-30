@@ -109,7 +109,7 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.DeleteForumPost)
     deleteForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPost) {
-        return this.fps.deletePost(payload).pipe(
+        return this.fps.deletePost(payload.id).pipe(
             map((post: Forumpost) =>
                 asapScheduler.schedule(() => dispatch(new forumpostsActions.DeleteForumPostSuccess(post))
             )),
