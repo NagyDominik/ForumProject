@@ -80,15 +80,15 @@ export class ForumpostsState {
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
         return this.fps.createPost(payload.post, payload.file).pipe(
-            map((post: Forumpost) =>
-                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
-            )),
-            catchError(error =>
-                of(
-                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
-                )
+        map((post: Forumpost) =>
+            asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
+        )),
+        catchError(error =>
+            of(
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
             )
-            );
+        )
+        );
     }
 
     @Action(forumpostsActions.AddForumPostSuccess)

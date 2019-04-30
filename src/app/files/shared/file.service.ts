@@ -11,7 +11,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class FileService {
 
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
-
+// TODO: this returns an UploadTaskSnapshot insted of a FileMeta
   uploadImage(file: File, location: string): Observable<FileMeta> {
     const uid = this.db.createId();
     return defer(() => this.storage.ref(this.createPath(location, uid))

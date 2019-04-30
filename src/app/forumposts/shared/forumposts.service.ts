@@ -22,14 +22,18 @@ export class ForumpostsService {
       postProcessed.description = post.description;
     }
 
+    debugger;
+
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
+        console.log('Meta:', picture);
         postProcessed.pictureID = picture.id;
-        return this.createForumDBEntry(postProcessed);
+        console.log('Image uploaded', postProcessed);
       });
-    } else {
-      return this.createForumDBEntry(postProcessed);
     }
+
+    return this.createForumDBEntry(postProcessed);
+
   }
 
   getAllPosts(): Observable<Forumpost[]> {
