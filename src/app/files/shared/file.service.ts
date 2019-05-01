@@ -16,16 +16,16 @@ export class FileService {
     const uid = this.db.createId();
     return defer(() => this.storage.ref(this.createPath(location, uid))
         .put(file, {
-          customMetadata: {
+           customMetadata: {
             originalName: file.name
-          }
+          },
         })
         .then()
       ).pipe(
         map(fileRef => {
           fileRef.id = uid;
-          console.log('FileRef:', fileRef);
-          return fileRef;
+          const fileMeta: FileMeta = {id: uid, lastChanged: file.lastModified, name: file.name, type: file.type, size: file.size };
+          return fileMeta;
         })
       );
   }
