@@ -22,8 +22,6 @@ export class ForumpostsService {
       postProcessed.description = post.description;
     }
 
-    debugger;
-
     if (file) {
       this.fs.uploadImage(file, 'forum').subscribe(picture => {
         console.log('Meta:', picture);
