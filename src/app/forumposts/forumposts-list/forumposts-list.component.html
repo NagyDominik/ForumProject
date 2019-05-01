@@ -28,7 +28,7 @@
         <button  id="moreMenuBtn" mat-icon-button [matMenuTriggerFor]="moreMenu">
           <mat-icon>more_vert</mat-icon>
           <mat-menu #moreMenu="matMenu">
-            <button mat-menu-item>Edit</button>
+            <button mat-menu-item id="editPost" (click)="openDialog(post)">Edit</button>
             <button mat-menu-item id="deletePost" (click)="deleteForumPost(post)">Delete</button>
           </mat-menu>
         </button>

@@ -3,7 +3,14 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatButtonModule, MatIconModule, MatMenuModule } from '@angular/material';
+import {
+  MatButtonModule,
+  MatDialogModule,
+  MatFormFieldModule,
+  MatIconModule,
+  MatInputModule,
+  MatMenuModule
+} from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxsReduxDevtoolsPluginModule } from '@ngxs/devtools-plugin';
@@ -15,11 +22,13 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ForumpostsState } from './store/state/forumposts.state';
-
+import {ForumpostUpdateDialogComponent} from './forumposts/forumpost-update-dialog/forumpost-update-dialog.component';
+import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent
+    NavbarComponent,
+    ForumpostUpdateDialogComponent
   ],
   imports: [
     FlexLayoutModule,
@@ -32,12 +41,18 @@ import { ForumpostsState } from './store/state/forumposts.state';
     MatButtonModule,
     MatMenuModule,
     MatIconModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    FormsModule,
+    MatInputModule,
+    ReactiveFormsModule,
     NgxsModule.forRoot([
       ForumpostsState
     ]),
     NgxsReduxDevtoolsPluginModule.forRoot(),
     NgxsLoggerPluginModule.forRoot()
   ],
+  entryComponents: [ForumpostUpdateDialogComponent],
   providers: [],
   bootstrap: [AppComponent]
 })
