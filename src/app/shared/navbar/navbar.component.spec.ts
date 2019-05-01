@@ -31,12 +31,4 @@ describe('NavbarComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  it('should have a button of `Forum`', () => {
-    expect(navbarDe.query(By.css('button')).nativeElement.innerText).toBe('Forum');
-  });
-
-  it('should have a menu', () => {
-    expect(navbarDe.query(By.css('mat-menu')).nativeElement).toBeDefined();
-  });
 });

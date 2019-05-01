@@ -1,8 +1,8 @@
-import {ComponentFixture} from '@angular/core/testing';
-import {By} from '@angular/platform-browser';
+import { ComponentFixture } from '@angular/core/testing';
+import { By } from '@angular/platform-browser';
 
 export class DOMHelper<T> {
-  private fixture: ComponentFixture<T>
+  private fixture: ComponentFixture<T>;
   constructor(fixture: ComponentFixture<T>) {
     this.fixture = fixture;
   }
@@ -12,8 +12,7 @@ export class DOMHelper<T> {
   }
   clickButton(buttonText: string) {
     this.findAll('button').forEach(button => {
-      const buttonElement: HTMLButtonElement =
-        button.nativeElement;
+      const buttonElement: HTMLButtonElement = button.nativeElement;
       if (buttonElement.textContent === buttonText) {
         buttonElement.click();
       }

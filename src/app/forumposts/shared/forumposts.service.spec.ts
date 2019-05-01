@@ -15,7 +15,7 @@ describe('ForumpostsService', () => {
   let service: ForumpostsService;
   let helper: Helper;
 
-  beforeEach(async(() => {
+  beforeEach(() => {
     helper = new Helper();
     angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection', 'doc']);
     firestoreCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges', 'add']);
@@ -41,7 +41,7 @@ describe('ForumpostsService', () => {
 
     httpMock = getTestBed().get(HttpTestingController);
     service = TestBed.get(ForumpostsService);
-  }));
+  });
 
   it('should create', () => {
     expect(service).toBeTruthy();
