@@ -21,7 +21,7 @@ describe('UserService', () => {
     angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection']);
     firestoreCollectionMock = jasmine.createSpyObj('collection', ['doc']);
     firestoreDocMock = jasmine.createSpyObj('doc', ['snapshotChanges']);
-    fileServiceMock = jasmine.createSpyObj('FileService', ['uploadImage']);
+    fileServiceMock = jasmine.createSpyObj('FileService', ['uploadImage', 'getFileUrl']);
     angularFirestoreMock.collection.and.returnValue(firestoreCollectionMock);
     firestoreCollectionMock.doc.and.returnValue(firestoreDocMock);
 
@@ -73,10 +73,12 @@ describe('UserService', () => {
   });
 
   describe('getUserWithProfilePic', () => {
-    // it('should call getUserById once', () => {
-    //   service.getUserWithProfilePic('id');
-    //   expect(service.getUserById).toHaveBeenCalledTimes(1);
-    // });
+    it('should call getUserById once', () => {
+      fileServiceMock.getFileUrl.and.returnValue(of('URL'));
+      spyOn(service, 'getUserById').and.returnValue(helper.getUserWithProfilePic(true));
+      service.getUserWithProfilePic('id').subscribe();
+      expect(service.getUserById).toHaveBeenCalledTimes(1);
+    });
   });
 });
 

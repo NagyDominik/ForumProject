@@ -3,9 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
-import { FileMeta } from '../../files/shared/file-meta.model';
-import { posix } from 'path';
-
 
 import { Forumpost } from './forumpost.model';
 
