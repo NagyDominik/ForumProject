@@ -55,6 +55,24 @@ export class DeleteForumPostFail {
     constructor(public payload?: any) {}
 }
 
+export class UpdateForumPost {
+    static readonly type = '[Forumpost] Update Forumpost';
+
+    constructor(public payload: Forumpost) {}
+}
+
+export class UpdateForumPostSuccess {
+    static readonly type = '[Forumpost] Update Forumpost Success';
+
+    constructor(public payload: Forumpost) {}
+}
+
+export class UpdateForumPostFail {
+    static readonly type = '[Forumpost] Update Forumpost Fail';
+
+    constructor(public payload: Forumpost) {}
+}
+
 export type ForumpostsActions =
 | LoadForumPosts
 | LoadForumPostsSuccess
@@ -64,4 +82,7 @@ export type ForumpostsActions =
 | AddForumPostFail
 | DeleteForumPost
 | DeleteForumPostSuccess
-| DeleteForumPostFail;
+| DeleteForumPostFail
+| UpdateForumPost
+| UpdateForumPostSuccess
+| UpdateForumPostFail;

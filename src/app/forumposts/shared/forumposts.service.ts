@@ -5,7 +5,6 @@ import { Observable, from, of } from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 import { FileMeta } from '../../files/shared/file-meta.model';
-import { posix } from 'path';
 
 
 @Injectable({
@@ -15,7 +14,7 @@ export class ForumpostsService {
 
   constructor(private db: AngularFirestore, private fs: FileService) { }
 
-  createPost(post: Forumpost, file: File): Observable<Forumpost> {
+  createPost(post: Forumpost): Observable<Forumpost> {
     const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
@@ -25,17 +24,21 @@ export class ForumpostsService {
       postProcessed.description = post.description;
     }
 
-    if (file) {
-        this.fs.uploadImage(file, 'forum').subscribe({next: picture => {
-          postProcessed.pictureID = picture.id;
-         },
-          complete: () => {
-            const stuff = this.createForumDBEntry(postProcessed);
-            console.log('Return from createForumDBEntry: ', stuff);
-          }});
-    } else {
-       return this.createForumDBEntry(postProcessed);
-    }
+    return this.createForumDBEntry(postProcessed);
+  }
+
+  createPostWithImage(post: Forumpost, file: File): Observable<Forumpost> {
+    const postProcessed: Forumpost = {
+      title: post.title,
+      postDate: new Date(Date.now()).toISOString()
+    };
+
+    this.fs.uploadImage(file, 'forum').subscribe(data => {
+      postProcessed.pictureID = data.id;
+      this.createForumDBEntry(postProcessed);
+    });
+
+    return of(postProcessed);
   }
 
   getAllPosts(): Observable<Forumpost[]> {
