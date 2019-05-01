@@ -1,12 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { Forumpost } from '../shared/forumpost.model';
-import { Observable } from 'rxjs';
-
 import { Select, Store } from '@ngxs/store';
-import { LoadForumPosts, DeleteForumPost } from 'src/app/store/actions/forumposts.actions';
+import { Observable } from 'rxjs';
+import { DeleteForumPost, LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
+
 import {MatDialog, MatDialogConfig} from '@angular/material';
 import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpost-update-dialog.component';
+
+
+import { Forumpost } from '../shared/forumpost.model';
+
 
 @Component({
   selector: 'app-forumposts-list',
@@ -16,9 +19,11 @@ import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpo
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
+
   constructor(private store: Store, public dialog: MatDialog) {
      this.store.dispatch(new LoadForumPosts());
 }
+
 
   ngOnInit() {
   }
