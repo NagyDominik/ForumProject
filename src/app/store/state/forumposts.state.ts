@@ -79,7 +79,7 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
-        return this.fps.createPost(payload.post, payload.file).pipe(
+        /*return this.fps.createPost(payload.post, payload.file).pipe(
         map((post: Forumpost) =>
             asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
         )),
@@ -88,7 +88,30 @@ export class ForumpostsState {
                 asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
             )
         )
-        );
+        );*/
+        if (payload.file) {
+            return this.fps.createPostWithImage(payload.post, payload.file).pipe(
+                map((post: Forumpost) =>
+                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
+                )),
+                catchError(error =>
+                    of(
+                        asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
+                    )
+                )
+                );
+        } else {
+            return this.fps.createPost(payload.post).pipe(
+                map((post: Forumpost) =>
+                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
+                )),
+                catchError(error =>
+                    of(
+                        asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
+                    )
+                )
+            );
+        }
     }
 
     @Action(forumpostsActions.AddForumPostSuccess)
@@ -130,6 +153,12 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.DeleteForumPostFail)
     deleteForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
+
+    }
+
+    // Update forumpost
+    @Action(forumpostsActions.UpdateForumPost)
+    updateForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.UpdateForumPost) {
 
     }
 }

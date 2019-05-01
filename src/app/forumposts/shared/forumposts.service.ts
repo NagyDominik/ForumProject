@@ -1,9 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Forumpost } from './forumpost.model';
-import { Observable, from, of } from 'rxjs';
-import {map, switchMap, tap} from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
+import { FileMeta } from '../../files/shared/file-meta.model';
+
+import { Forumpost } from './forumpost.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +14,7 @@ export class ForumpostsService {
 
   constructor(private db: AngularFirestore, private fs: FileService) { }
 
-  createPost(post: Forumpost, file: File): Observable<Forumpost> {
+  createPost(post: Forumpost): Observable<Forumpost> {
     const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
@@ -22,16 +24,21 @@ export class ForumpostsService {
       postProcessed.description = post.description;
     }
 
-    if (file) {
-      this.fs.uploadImage(file, 'forum').subscribe(picture => {
-        console.log('Meta:', picture);
-        postProcessed.pictureID = picture.id;
-        console.log('Image uploaded', postProcessed);
-      });
-    }
-
     return this.createForumDBEntry(postProcessed);
+  }
 
+  createPostWithImage(post: Forumpost, file: File): Observable<Forumpost> {
+    const postProcessed: Forumpost = {
+      title: post.title,
+      postDate: new Date(Date.now()).toISOString()
+    };
+
+    this.fs.uploadImage(file, 'forum').subscribe(data => {
+      postProcessed.pictureID = data.id;
+      this.createForumDBEntry(postProcessed);
+    });
+
+    return of(postProcessed);
   }
 
   getAllPosts(): Observable<Forumpost[]> {
@@ -40,8 +47,8 @@ export class ForumpostsService {
         posts.forEach(post => {
           if (post.pictureID) {
             this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
-                post.pictureUrl = url;
-              });
+              post.pictureUrl = url;
+            });
           }
         });
       }));
@@ -72,16 +79,16 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      console.log('post: ', post);
+      console.log('Forum DB entry created: ', post);
       return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
           console.log('postRef: ', postRef);
+          console.log('Post after creating db entry: ', post);
           return post;
         })
       );
   }
-
 
   deletePost(id: string): Observable<Forumpost> {
     return this.db.doc<Forumpost>('forumposts/' + id)
@@ -108,5 +115,3 @@ export class ForumpostsService {
     return this.db.d
   }
 }
-
-

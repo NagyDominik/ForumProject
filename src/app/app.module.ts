@@ -3,13 +3,14 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {
   MatButtonModule,
   MatDialogModule,
   MatFormFieldModule,
   MatIconModule,
   MatInputModule,
-  MatMenuModule
+  MatMenuModule,
 } from '@angular/material';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -20,10 +21,10 @@ import { environment } from 'src/environments/environment';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { ForumpostUpdateDialogComponent } from './forumposts/forumpost-update-dialog/forumpost-update-dialog.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ForumpostsState } from './store/state/forumposts.state';
-import {ForumpostUpdateDialogComponent} from './forumposts/forumpost-update-dialog/forumpost-update-dialog.component';
-import {FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,

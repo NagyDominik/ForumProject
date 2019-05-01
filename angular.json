@@ -91,6 +91,12 @@
             "assets": [
               "src/favicon.ico",
               "src/assets"
+            ],
+            "codeCoverageExclude": [
+              "src/testing/**",
+              "src/app/store/**",
+              "src/test.ts",
+              "src/app/app-routing.module.ts"
             ]
           }
         },
