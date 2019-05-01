@@ -9,7 +9,7 @@ import { NgxsModule, Store, NGXS_PLUGINS } from '@ngxs/store';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 import { Forumpost } from '../shared/forumpost.model';
 import { NGXS_ACTIONS, NgxsTestPlugin } from 'src/testing/NgxsTestPlugin';
-import { getActionTypeFromClass, getActionTypeFromInstance } from '@ngxs/store/src/utils/utils';
+import { getActionTypeFromInstance } from '@ngxs/store/src/utils/utils';
 
 
 describe('ForumpostsListComponent', () => {

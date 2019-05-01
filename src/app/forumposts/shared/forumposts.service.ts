@@ -4,6 +4,9 @@ import { Forumpost } from './forumpost.model';
 import { Observable, from, of } from 'rxjs';
 import {map, switchMap, tap} from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
+import { FileMeta } from '../../files/shared/file-meta.model';
+import { posix } from 'path';
+
 
 @Injectable({
   providedIn: 'root'
@@ -23,15 +26,16 @@ export class ForumpostsService {
     }
 
     if (file) {
-      this.fs.uploadImage(file, 'forum').subscribe(picture => {
-        console.log('Meta:', picture);
-        postProcessed.pictureID = picture.id;
-        console.log('Image uploaded', postProcessed);
-      });
+        this.fs.uploadImage(file, 'forum').subscribe({next: picture => {
+          postProcessed.pictureID = picture.id;
+         },
+          complete: () => {
+            const stuff = this.createForumDBEntry(postProcessed);
+            console.log('Return from createForumDBEntry: ', stuff);
+          }});
+    } else {
+       return this.createForumDBEntry(postProcessed);
     }
-
-    return this.createForumDBEntry(postProcessed);
-
   }
 
   getAllPosts(): Observable<Forumpost[]> {
@@ -72,11 +76,12 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      console.log('post: ', post);
+      console.log('Forum DB entry created: ', post);
       return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
           console.log('postRef: ', postRef);
+          console.log('Post after creating db entry: ', post);
           return post;
         })
       );
