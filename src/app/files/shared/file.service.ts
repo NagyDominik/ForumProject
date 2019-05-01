@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Observable, from, defer } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
-import { FileMeta } from './file-meta.model';
-import { AngularFireStorage } from '@angular/fire/storage';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFireStorage } from '@angular/fire/storage';
+import { defer, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+
+import { FileMeta } from './file-meta.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,23 +12,24 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class FileService {
 
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
-// TODO: this returns an UploadTaskSnapshot insted of a FileMeta
+
+  // TODO: this returns an UploadTaskSnapshot insted of a FileMeta
   uploadImage(file: File, location: string): Observable<FileMeta> {
     const uid = this.db.createId();
     return defer(() => this.storage.ref(this.createPath(location, uid))
-        .put(file, {
-          customMetadata: {
-            originalName: file.name
-          }
-        })
-        .then()
-      ).pipe(
-        map(fileRef => {
-          fileRef.id = uid;
-          console.log('FileRef:', fileRef);
-          return fileRef;
-        })
-      );
+      .put(file, {
+        customMetadata: {
+          originalName: file.name
+        }
+      })
+      .then()
+    ).pipe(
+      map(fileRef => {
+        fileRef.id = uid;
+        console.log('FileRef:', fileRef);
+        return fileRef;
+      })
+    );
   }
 
   getFileUrl(pictureID: string, location: string): Observable<any> {

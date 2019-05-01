@@ -11,7 +11,6 @@ describe('ForumpostsService', () => {
   let fileServiceMock: any;
   let firestoreCollectionMock: any;
   let firestoreDocMock: any;
-  let httpMock: HttpTestingController;
   let service: ForumpostsService;
   let helper: Helper;
 
@@ -29,17 +28,12 @@ describe('ForumpostsService', () => {
     fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'uploadImage']);
 
     TestBed.configureTestingModule({
-      imports: [
-        AngularFirestoreModule,
-        HttpClientTestingModule,
-      ],
       providers: [
         { provide: AngularFirestore, useValue: angularFirestoreMock },
         { provide: FileService, useValue: fileServiceMock }
       ]
     });
 
-    httpMock = getTestBed().get(HttpTestingController);
     service = TestBed.get(ForumpostsService);
   });
 

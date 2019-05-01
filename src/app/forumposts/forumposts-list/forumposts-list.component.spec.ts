@@ -39,14 +39,13 @@ describe('ForumpostsListComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should create', () => {
-      expect(component).toBeTruthy();
-    });
-
-    it('Should call getAllPosts on the ForumpostService one time on ngOnInit', () => {
-      expect(forumPostServiceMock.getAllPosts).toHaveBeenCalledTimes(1);
-    });
-
   }));
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
+
+  it('Should call getAllPosts on the ForumpostService one time on ngOnInit', () => {
+    expect(forumPostServiceMock.getAllPosts).toHaveBeenCalledTimes(1);
+  });
 });
 

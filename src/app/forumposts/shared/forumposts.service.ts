@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Forumpost } from './forumpost.model';
-import { Observable, from, of } from 'rxjs';
-import {map, switchMap, tap} from 'rxjs/operators';
+import { from, Observable } from 'rxjs';
+import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
+
+import { Forumpost } from './forumpost.model';
 
 @Injectable({
   providedIn: 'root'
@@ -84,7 +85,6 @@ export class ForumpostsService {
       );
   }
 
-
   deletePost(id: string): Observable<Forumpost> {
     return this.db.doc<Forumpost>('forumposts/' + id)
       .get().pipe(
@@ -107,5 +107,3 @@ export class ForumpostsService {
       );
   }
 }
-
-
