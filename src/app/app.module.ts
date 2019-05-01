@@ -15,13 +15,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
 import { ForumpostsState } from './store/state/forumposts.state';
-import { FilesModule } from './files/files.module';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
-    FilesModule
+    NavbarComponent
   ],
   imports: [
     FlexLayoutModule,

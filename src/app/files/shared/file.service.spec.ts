@@ -26,9 +26,8 @@ describe('FileService', () => {
     expect(FileService).toBeTruthy();
   });
 
-  describe('FileServicesadasd', () => {
-    it('should create', () => {
-      expect(service).toBeTruthy();
+  describe('uploadImage', () => {
+    it('should call createId once', () => {
     });
   });
 

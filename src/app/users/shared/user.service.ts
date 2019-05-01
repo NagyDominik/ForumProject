@@ -14,7 +14,7 @@ export class UserService {
 
   constructor(private fs: FileService, private db: AngularFirestore) { }
 
-  createUser(user?: User): Observable<User> {
+  /*createUser(user?: User): Observable<User> {
     return from(this.db.collection('users').add(
       {
         username: 'DefaultUser',
@@ -27,7 +27,7 @@ export class UserService {
         return user;
       })
     );
-  }
+  }*/
 
   uploadProfileImage(blob: Blob, type: string, name: string): Observable<FileMeta> {
     const fileToUpload = new File([blob], name, { type: type });

@@ -41,8 +41,8 @@ export class ForumpostsService {
         posts.forEach(post => {
           if (post.pictureID) {
             this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
-                post.pictureUrl = url;
-              });
+              post.pictureUrl = url;
+            });
           }
         });
       }));
@@ -73,14 +73,14 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      console.log('post: ', post);
-      return from(this.db.collection('forumposts').add(post)).pipe(
-        map(postRef => {
-          post.id = postRef.id;
-          console.log('postRef: ', postRef);
-          return post;
-        })
-      );
+    console.log('post: ', post);
+    return from(this.db.collection('forumposts').add(post)).pipe(
+      map(postRef => {
+        post.id = postRef.id;
+        console.log('postRef: ', postRef);
+        return post;
+      })
+    );
   }
 
   deletePost(id: string): Observable<Forumpost> {

@@ -1,6 +1,5 @@
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
-import { getTestBed, TestBed, async } from '@angular/core/testing';
-import { AngularFirestore, AngularFirestoreModule } from '@angular/fire/firestore';
+import { TestBed } from '@angular/core/testing';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable, of } from 'rxjs';
 import { FileService } from 'src/app/files/shared/file.service';
 
@@ -19,13 +18,11 @@ describe('ForumpostsService', () => {
     angularFirestoreMock = jasmine.createSpyObj('AngularFirestore', ['collection', 'doc']);
     firestoreCollectionMock = jasmine.createSpyObj('collection', ['snapshotChanges', 'valueChanges', 'add']);
     firestoreDocMock = jasmine.createSpyObj('doc', ['get', 'delete']);
+    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'uploadImage']);
 
     angularFirestoreMock.collection.and.returnValue(firestoreCollectionMock);
     firestoreCollectionMock.snapshotChanges.and.returnValue(of([]));
-
     angularFirestoreMock.doc.and.returnValue(firestoreDocMock);
-
-    fileServiceMock = jasmine.createSpyObj('FileService', ['getFileUrl', 'uploadImage']);
 
     TestBed.configureTestingModule({
       providers: [
@@ -56,24 +53,39 @@ describe('ForumpostsService', () => {
   });
 
   describe('getForumPosts return value', () => {
-    it('should be call getAllForumPosts and return a single post ', () => {
+    beforeEach(() => {
+      fileServiceMock.getFileUrl.and.returnValue(of('URL'));
+    });
+
+    it('should call getAllPosts and return a single post ', () => {
       firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(1));
       service.getAllPosts().subscribe(post => {
         expect(post.length).toBe(1);
       });
     });
 
-    it('should be call getAllForumPosts and return 10 posts ', () => {
+    it('should call getAllPosts and return 10 posts ', () => {
       firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
-      service.getAllPosts().subscribe(post => {
-        expect(post.length).toBe(10);
+      service.getAllPosts().subscribe(posts => {
+        expect(posts.length).toBe(10);
       });
     });
 
-    it('should be call getPostList and return 10 posts ', () => {
+    it('should call getPostList and return 10 posts ', () => {
       firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
-      service.getPostsList().subscribe(post => {
-        expect(post.length).toBe(10);
+      service.getPostsList().subscribe(posts => {
+        expect(posts.length).toBe(10);
+      });
+    });
+
+    it('should include picture to posts ', () => {
+      firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getActions(10));
+      service.getPostsList().subscribe(posts => {
+        posts.forEach(post => {
+          if (post.pictureUrl) {
+            expect(post.pictureUrl).toEqual('URL');
+          }
+        });
       });
     });
   });
@@ -81,17 +93,23 @@ describe('ForumpostsService', () => {
   describe('createPost', () => {
     beforeEach(() => {
       firestoreCollectionMock.add.and.returnValue(helper.getActions(1));
-      service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd', description: 'description' }, null).subscribe();
+      fileServiceMock.uploadImage.and.returnValue(helper.getImageUpload());
     });
 
     it('should be called once ', () => {
+      service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd', description: 'description' }, null).subscribe();
       expect(firestoreCollectionMock.add).toHaveBeenCalledTimes(1);
+    });
+
+    it('should upload image if there is one ', () => {
+      const tempFile = new File([], 'test');
+      service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd', description: 'description' }, tempFile).subscribe();
+      expect(fileServiceMock.uploadImage).toHaveBeenCalledTimes(1);
     });
 
   });
 
   describe('deletePost', () => {
-
     it('should be called once ', () => {
       firestoreDocMock.get.and.returnValue(helper.getActions(1));
       service.deletePost('id');
@@ -105,16 +123,16 @@ describe('ForumpostsService', () => {
       expect(firestoreDocMock.delete).toHaveBeenCalledTimes(1);
     });
 
-    // Dunno how to catch the error
-    // it('should throw error if post cannot be found', () => {
-    //   firestoreDocMock.get.and.returnValue(helper.getDocumentSnapshot(0));
-    //   firestoreDocMock.delete.and.returnValue(helper.getDocumentSnapshot(1));
-    //   try {
-    //     service.deletePost('id').subscribe();
-    //   } catch (error) {
-    //     expect(error).toBe(new Error('Post not found'));
-    //   }
-    // });
+    it('should throw error if post cannot be found', () => {
+      firestoreDocMock.get.and.returnValue(helper.getDocumentSnapshot(0));
+      firestoreDocMock.delete.and.returnValue(helper.getDocumentSnapshot(1));
+      service.deletePost('id').subscribe({
+        error: (err) => {
+          expect(err).toEqual(new Error('Post not found'));
+        }
+      });
+    });
+
   });
 
 });
@@ -134,7 +152,7 @@ class Helper {
                 title: 'asd' + i,
                 postDate: 'date' + i,
                 description: 'description',
-                // pictureID: 'picID'
+                pictureID: 'picID'
               };
             }
           }
@@ -144,7 +162,7 @@ class Helper {
     return of(this.actions);
   }
 
-  getDocumentSnapshot(num: number): Observable<any[]> {
+  getDocumentSnapshot(num: number): Observable<any> {
     if (num === 0) {
       this.docSnapshot = {
         id: 'asdasdas',
@@ -164,5 +182,11 @@ class Helper {
       };
     }
     return of(this.docSnapshot);
+  }
+
+  getImageUpload(): Observable<any> {
+    return of({
+      id: 'test',
+    });
   }
 }
