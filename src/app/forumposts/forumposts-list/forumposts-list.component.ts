@@ -9,6 +9,7 @@ import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpo
 
 
 import { Forumpost } from '../shared/forumpost.model';
+import {ForumpostsService} from '../shared/forumposts.service';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
 
-  constructor(private store: Store, public dialog: MatDialog) {
+  constructor(private store: Store, public dialog: MatDialog, private service: ForumpostsService) {
      this.store.dispatch(new LoadForumPosts());
 }
 
@@ -44,7 +45,7 @@ export class ForumpostsListComponent implements OnInit {
     );
 
     dialogRef.afterClosed().subscribe(result =>
-      result = updatePost.title
+      this.service.updatePost(result)
     );
   }
 

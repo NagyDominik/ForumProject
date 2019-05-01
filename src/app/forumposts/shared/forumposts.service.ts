@@ -104,6 +104,9 @@ export class ForumpostsService {
         })
       );
   }
+  updatePost(post: Forumpost): Observable<Forumpost> {
+    return this.db.d
+  }
 }
 
 
