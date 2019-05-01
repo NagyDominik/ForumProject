@@ -1,11 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { MatSnackBar } from '@angular/material';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { DeleteForumPost, LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 
+import {MatDialog, MatDialogConfig} from '@angular/material';
+import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpost-update-dialog.component';
+
+
 import { Forumpost } from '../shared/forumpost.model';
+
 
 @Component({
   selector: 'app-forumposts-list',
@@ -15,20 +19,36 @@ import { Forumpost } from '../shared/forumpost.model';
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
-  constructor(private store: Store, public snackBar: MatSnackBar) {
-    this.store.dispatch(new LoadForumPosts());
-  }
+
+  constructor(private store: Store, public dialog: MatDialog) {
+     this.store.dispatch(new LoadForumPosts());
+}
+
 
   ngOnInit() {
   }
 
-  deleteForumPost(forumPost: Forumpost) {
-    this.store.dispatch(new DeleteForumPost(forumPost));
+  openDialog(updatePost: Forumpost): void {
+
+    const dialogConfig = new MatDialogConfig();
+
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+
+    const dialogRef = this.dialog.open(ForumpostUpdateDialogComponent, {
+      data: updatePost,
+      disableClose: true,
+      autoFocus: true,
+      width: '350px',
+      }
+    );
+
+    dialogRef.afterClosed().subscribe(result =>
+      result = updatePost.title
+    );
   }
 
-  openSnackBar(message: string) {
-    this.snackBar.open(message, 'OK', {
-      duration: 2000,
-    });
+  deleteForumPost(forumPost: Forumpost) {
+    this.store.dispatch(new DeleteForumPost(forumPost));
   }
 }

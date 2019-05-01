@@ -6,6 +6,11 @@ import { NGXS_ACTIONS, NgxsTestPlugin } from 'src/testing/NgxsTestPlugin';
 
 import { ForumpostsService } from '../shared/forumposts.service';
 import { ForumpostsListComponent } from './forumposts-list.component';
+import { NgxsModule, Store, NGXS_PLUGINS } from '@ngxs/store';
+import { ForumpostsState } from 'src/app/store/state/forumposts.state';
+import { Forumpost } from '../shared/forumpost.model';
+import { NGXS_ACTIONS, NgxsTestPlugin } from 'src/testing/NgxsTestPlugin';
+import { getActionTypeFromInstance } from '@ngxs/store/src/utils/utils';
 
 
 describe('ForumpostsListComponent', () => {
