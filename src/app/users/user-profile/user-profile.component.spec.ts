@@ -2,11 +2,9 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material';
 import { ImageCropperModule } from 'ngx-image-cropper';
-import { Observable, of } from 'rxjs';
-import { FileMeta } from 'src/app/files/shared/file-meta.model';
 import { DOMHelper } from 'src/testing/dom-helper';
+import { FunctionHelper } from 'src/testing/function.helper';
 
-import { User } from '../shared/user.model';
 import { UserService } from '../shared/user.service';
 import { UserProfileComponent } from './user-profile.component';
 
@@ -15,11 +13,11 @@ describe('UserProfileComponent', () => {
   let fixture: ComponentFixture<UserProfileComponent>;
   let userServiceMock: any;
   let snackBarMock: any;
-  let helper: Helper;
+  let helper: FunctionHelper;
   let dh: DOMHelper<UserProfileComponent>;
 
   beforeEach(async(() => {
-    helper = new Helper();
+    helper = new FunctionHelper();
     userServiceMock = jasmine.createSpyObj('UserService', ['uploadProfileImage', 'getUserWithProfilePic']);
     snackBarMock = jasmine.createSpyObj('MatSnackBar', ['open']);
 
@@ -39,7 +37,7 @@ describe('UserProfileComponent', () => {
   }));
 
   beforeEach(() => {
-    userServiceMock.getUserWithProfilePic.and.returnValue(helper.getUserWithProfilePic());
+    userServiceMock.getUserWithProfilePic.and.returnValue(helper.getUserWithProfilePicUrl());
     fixture = TestBed.createComponent(UserProfileComponent);
     component = fixture.componentInstance;
     dh = new DOMHelper(fixture);
@@ -63,7 +61,7 @@ describe('UserProfileComponent', () => {
 
   describe('uploadFile', () => {
     it('should reset variables', () => {
-      component.imageChangedEvent = helper.getEventWithFile();
+      component.imageChangedEvent = helper.getEventWithFile(true);
       userServiceMock.uploadProfileImage.and.returnValue(helper.getFileMeta());
       component.uploadFile();
       expect(component.imageChangedEvent).toBe('');
@@ -75,21 +73,20 @@ describe('UserProfileComponent', () => {
 
   describe('setUploadFile', () => {
     it('should set variables', () => {
-      const event = helper.getEventWithFile();
+      const event = helper.getEventWithFile(true);
       component.setUploadFile(event);
       expect(component.fileToUpload).toBe(event.target.files[0]);
     });
 
     it('should call loadFile once', () => {
-      const event = helper.getEventWithFile();
+      const event = helper.getEventWithFile(true);
       spyOn(component, 'loadFile');
       component.setUploadFile(event);
       expect(component.loadFile).toHaveBeenCalledTimes(1);
     });
 
     it('should open snackbar if file is not an image', () => {
-      const event = helper.getEventWithFile();
-      event.target.files[0].type = 'gnp/egami';
+      const event = helper.getEventWithFile(false);
       component.setUploadFile(event);
       expect(snackBarMock.open).toHaveBeenCalledTimes(1);
     });
@@ -97,7 +94,7 @@ describe('UserProfileComponent', () => {
 
   describe('imageCropped', () => {
     it('should set variables', () => {
-      const event = helper.getEventWithFile();
+      const event = helper.getEventWithFile(true);
       component.imageCropped(event);
       expect(component.croppedImage).toBe(event.base64);
       expect(component.croppedBlob).toBe(event.file);
@@ -105,40 +102,3 @@ describe('UserProfileComponent', () => {
   });
 
 });
-
-class Helper {
-  getUserWithProfilePic(): Observable<User> {
-    return of(
-      {
-        id: 'fuiwehfvsdhgfoew',
-        username: 'testUser',
-        regDate: new Date(Date.now()).toISOString(),
-        profilePicUrl: 'http://www.visitfranklinsouthamptonva.com/media/95251/testing.jpg'
-      }
-    );
-  }
-
-  getFileMeta(): Observable<FileMeta> {
-    return of(
-      {
-        name: 'Test',
-        type: 'image/png',
-        size: 1500,
-      }
-    );
-  }
-
-  getEventWithFile(): any {
-    return {
-      target: {
-        files: [
-          {
-            type: 'image/png',
-          }
-        ]
-      },
-      file: {},
-      base64: 'base64',
-    };
-  }
-}

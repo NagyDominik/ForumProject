@@ -13,7 +13,6 @@ export class FileService {
 
   constructor(private storage: AngularFireStorage, private db: AngularFirestore) { }
 
-  // TODO: this returns an UploadTaskSnapshot insted of a FileMeta
   uploadImage(file: File, location: string): Observable<FileMeta> {
     const uid = this.db.createId();
     return defer(() => this.storage.ref(this.createPath(location, uid))
@@ -24,8 +23,7 @@ export class FileService {
         })
         .then()
       ).pipe(
-        map(fileRef => {
-          fileRef.id = uid;
+        map(() => {
           const fileMeta: FileMeta = {id: uid, lastChanged: file.lastModified, name: file.name, type: file.type, size: file.size };
           return fileMeta;
         })

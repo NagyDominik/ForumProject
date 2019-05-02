@@ -78,7 +78,7 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      console.log('Forum DB entry created: ', post);
+      // console.log('Forum DB entry created: ', post);
       return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
