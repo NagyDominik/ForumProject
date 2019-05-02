@@ -3,7 +3,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
-import { FileMeta } from '../../files/shared/file-meta.model';
 
 import { Forumpost } from './forumpost.model';
 
@@ -111,4 +110,21 @@ export class ForumpostsService {
         })
       );
   }
+
+  updatePost(post: Forumpost) {
+    console.log('it hits the updatePost in service');
+    return from(this.db.doc<Forumpost>('forumposts/' + post.id)
+      .get().pipe(
+        switchMap(postDoc => {
+          if (!postDoc || !postDoc.data()) {
+            throw new Error('Post not found');
+          } else {
+            return from(
+              this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
+            );
+          }
+        })
+      )
+  );
+    }
 }
