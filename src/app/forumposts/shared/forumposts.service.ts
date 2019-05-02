@@ -5,6 +5,7 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
 import { Forumpost } from './forumpost.model';
+import {__values} from 'tslib';
 
 @Injectable({
   providedIn: 'root'
@@ -112,19 +113,23 @@ export class ForumpostsService {
   }
 
   updatePost(post: Forumpost) {
-    console.log('it hits the updatePost in service');
-    return from(this.db.doc<Forumpost>('forumposts/' + post.id)
-      .get().pipe(
-        switchMap(postDoc => {
-          if (!postDoc || !postDoc.data()) {
-            throw new Error('Post not found');
-          } else {
-            return from(
-              this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
-            );
-          }
-        })
-      )
-  );
+    console.log(post);
+    if (post !== null) {
+      console.log('still going');
+      return this.db.doc<Forumpost>('forumposts/' + post.id)
+        .get().pipe(
+          switchMap(postDoc => {
+            console.log(postDoc);
+            if (!postDoc || !postDoc.data()) {
+              throw new Error('Post not found');
+            } else {
+              return from(
+                this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
+              );
+            }
+          })
+        );
+      }
     }
+
 }
