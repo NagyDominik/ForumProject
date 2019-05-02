@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeleteForumPost, LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
+import { DeleteForumPost, LoadForumPosts, UpdateForumPost } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 
 import { ForumpostUpdateDialogComponent } from '../forumpost-update-dialog/forumpost-update-dialog.component';
@@ -42,7 +42,8 @@ export class ForumpostsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null && result !== '') {
         updatePost.title = result;
-        this.service.updatePost(updatePost).subscribe();
+        // this.service.updatePost(updatePost).subscribe();
+        this.store.dispatch(new UpdateForumPost(updatePost));
       }
     });
 

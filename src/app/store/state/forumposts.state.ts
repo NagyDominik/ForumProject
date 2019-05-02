@@ -1,6 +1,6 @@
 import { Forumpost } from 'src/app/forumposts/shared/forumpost.model';
 import { State, Selector, Action, StateContext, Actions } from '@ngxs/store';
-import { AddForumPost } from '../actions/forumposts.actions';
+import { patch, updateItem } from '@ngxs/store/operators';
 import { ForumpostsService } from 'src/app/forumposts/shared/forumposts.service';
 import * as forumpostsActions from '../actions/forumposts.actions';
 import { asapScheduler, of } from 'rxjs';
@@ -159,6 +159,29 @@ export class ForumpostsState {
     // Update forumpost
     @Action(forumpostsActions.UpdateForumPost)
     updateForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.UpdateForumPost) {
+        return this.fps.updatePost(payload).pipe(
+            map((returnPost: Forumpost) =>
+            // tslint:disable-next-line:max-line-length
+            asapScheduler.schedule(() => dispatch(new forumpostsActions.UpdateForumPostSuccess(payload)) // TODO: updatePost() return a Forumpost instance with the old information, so use the payload to update the state
+        )),
+            catchError(error =>
+        of(
+            asapScheduler.schedule(() => dispatch(new forumpostsActions.UpdateForumPostFail(error))
+            )
+        )
+    ));
+    }
+
+    @Action(forumpostsActions.UpdateForumPostSuccess)
+    updateForumPostSuccess({getState, setState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.UpdateForumPostSuccess) {
+        setState(patch({
+            forumposts: updateItem<Forumpost>(post => post.id === payload.id, payload)
+        }));
+    }
+
+    @Action(forumpostsActions.UpdateForumPostFail)
+    updateForumpostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
 
     }
+
 }
