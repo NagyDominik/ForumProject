@@ -44,9 +44,13 @@ export class ForumpostsListComponent implements OnInit {
       }
     );
 
-    dialogRef.afterClosed().subscribe(result =>
-      this.service.updatePost(result)
-    );
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.service.updatePost(result);
+      }
+    });
+
+
   }
 
   deleteForumPost(forumPost: Forumpost) {

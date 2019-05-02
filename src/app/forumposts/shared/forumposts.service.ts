@@ -112,10 +112,15 @@ export class ForumpostsService {
   }
 
   updatePost(post: Forumpost) {
-    console.log('it hits the updatePost in service');
+    console.log('it hits the updatePost in service, ', post);
+    debugger;
+    this.db.doc<Forumpost>('forumposts/' + post.id).get().pipe(map((data) => {
+      console.log('data: ', data);
+    }));
     return from(this.db.doc<Forumpost>('forumposts/' + post.id)
       .get().pipe(
         switchMap(postDoc => {
+          console.log('postDoc: ', postDoc);
           if (!postDoc || !postDoc.data()) {
             throw new Error('Post not found');
           } else {
