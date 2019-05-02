@@ -11,7 +11,6 @@ import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpo
 import { Forumpost } from '../shared/forumpost.model';
 import {ForumpostsService} from '../shared/forumposts.service';
 
-
 @Component({
   selector: 'app-forumposts-list',
   templateUrl: './forumposts-list.component.html',
@@ -20,6 +19,7 @@ import {ForumpostsService} from '../shared/forumposts.service';
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
+  post: Forumpost;
 
   constructor(private store: Store, public dialog: MatDialog, private service: ForumpostsService) {
      this.store.dispatch(new LoadForumPosts());

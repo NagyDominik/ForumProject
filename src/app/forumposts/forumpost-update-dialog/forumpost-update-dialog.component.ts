@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {FormControl, FormGroup} from '@angular/forms';
 import {Forumpost} from '../shared/forumpost.model';
 import {post} from 'selenium-webdriver/http';
+import {ForumpostsService} from '../shared/forumposts.service';
 
 @Component({
   selector: 'app-forumpost-update-dialog',
@@ -17,6 +18,7 @@ export class ForumpostUpdateDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ForumpostUpdateDialogComponent>,
+    private service: ForumpostsService,
     @Inject(MAT_DIALOG_DATA) public data: any) {}
 
   save(): void {
@@ -32,13 +34,12 @@ export class ForumpostUpdateDialogComponent implements OnInit {
     if (this.data.pictureUrl) {
       post.pictureUrl = this.data.pictureUrl;
     }
-    console.log();
     this.dialogRef.close(post);
   }
 
   cancel(): void {
 
-    this.dialogRef.close(this.data);
+    this.dialogRef.close('');
   }
 
   ngOnInit() {
