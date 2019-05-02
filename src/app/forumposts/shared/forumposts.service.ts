@@ -1,10 +1,11 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import {from, Observable, of} from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
 import { Forumpost } from './forumpost.model';
+import {__values} from 'tslib';
 
 @Injectable({
   providedIn: 'root'
@@ -78,7 +79,7 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      console.log('Forum DB entry created: ', post);
+      // console.log('Forum DB entry created: ', post);
       return from(this.db.collection('forumposts').add(post)).pipe(
         map(postRef => {
           post.id = postRef.id;
@@ -112,24 +113,23 @@ export class ForumpostsService {
   }
 
   updatePost(post: Forumpost) {
-    console.log('it hits the updatePost in service, ', post);
-    debugger;
-    this.db.doc<Forumpost>('forumposts/' + post.id).get().pipe(map((data) => {
-      console.log('data: ', data);
-    }));
-    return from(this.db.doc<Forumpost>('forumposts/' + post.id)
-      .get().pipe(
-        switchMap(postDoc => {
-          console.log('postDoc: ', postDoc);
-          if (!postDoc || !postDoc.data()) {
-            throw new Error('Post not found');
-          } else {
-            return from(
-              this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
-            );
-          }
-        })
-      )
-  );
+    console.log(post);
+    if (post !== null) {
+      console.log('still going');
+      return this.db.doc<Forumpost>('forumposts/' + post.id)
+        .get().pipe(
+          switchMap(postDoc => {
+            console.log(postDoc);
+            if (!postDoc || !postDoc.data()) {
+              throw new Error('Post not found');
+            } else {
+              return from(
+                this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
+              );
+            }
+          })
+        );
+      }
     }
+
 }
