@@ -40,7 +40,6 @@ export class ForumpostsListComponent implements OnInit {
       data: updatePost,
       disableClose: true,
       autoFocus: true,
-      width: '350px',
       }
     );
 

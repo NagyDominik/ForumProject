@@ -1,19 +1,29 @@
 .container{
   text-align: center;
   align-content: center;
-  position:relative;
 }
 #cancelBtn{
-  position:absolute;
-  right:0px;
+  alignment: left !important;
+  margin-left: 50px;
+  border-color: #f44336;
+  color: red
 }
-
-.popUpDialog {
-  position:relative;
-  background-color:white;
-  width:200px;
-  margin:10% auto 0 auto;
-  height:auto;
-  border:10px solid white;
-  z-index: 9002;
+.btn{
+border: 1px solid black;
+background-color: white;
+color: black;
+font-size: 16px;
+cursor: pointer;
+}
+#cancelBtn:hover{
+  background: #f44336;
+  color: white;
+}
+#saveBtn{
+  border-color: #4CAF50;
+  color: green;
+}
+#saveBtn:hover {
+  background-color: #4CAF50;
+  color: white;
 }
