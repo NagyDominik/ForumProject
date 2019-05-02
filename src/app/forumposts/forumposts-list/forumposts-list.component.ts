@@ -1,15 +1,14 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { DeleteForumPost, LoadForumPosts } from 'src/app/store/actions/forumposts.actions';
+import { DeleteForumPost, LoadForumPosts, UpdateForumPost } from 'src/app/store/actions/forumposts.actions';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 
-import {MatDialog, MatDialogConfig} from '@angular/material';
-import {ForumpostUpdateDialogComponent} from '../forumpost-update-dialog/forumpost-update-dialog.component';
-
-
+import { ForumpostUpdateDialogComponent } from '../forumpost-update-dialog/forumpost-update-dialog.component';
 import { Forumpost } from '../shared/forumpost.model';
-import {ForumpostsService} from '../shared/forumposts.service';
+import { ForumpostsService } from '../shared/forumposts.service';
+
 
 @Component({
   selector: 'app-forumposts-list',
@@ -22,17 +21,14 @@ export class ForumpostsListComponent implements OnInit {
   post: Forumpost;
 
   constructor(private store: Store, public dialog: MatDialog, private service: ForumpostsService) {
-     this.store.dispatch(new LoadForumPosts());
-}
-
+    this.store.dispatch(new LoadForumPosts());
+  }
 
   ngOnInit() {
   }
 
   openDialog(updatePost: Forumpost): void {
-
     const dialogConfig = new MatDialogConfig();
-
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
 
@@ -40,14 +36,16 @@ export class ForumpostsListComponent implements OnInit {
       data: updatePost,
       disableClose: true,
       autoFocus: true,
-      }
-    );
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-       console.log(result);
-      this.service.updatePost(result);
+      if (result != null && result !== '') {
+        updatePost.title = result;
+        // this.service.updatePost(updatePost).subscribe();
+        this.store.dispatch(new UpdateForumPost(updatePost));
       }
-    );
+    });
+
   }
 
   deleteForumPost(forumPost: Forumpost) {

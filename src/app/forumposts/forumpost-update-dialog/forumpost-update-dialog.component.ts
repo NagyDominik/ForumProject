@@ -1,7 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
-import {FormControl, FormGroup} from '@angular/forms';
-import {Forumpost} from '../shared/forumpost.model';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormControl, FormGroup } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 @Component({
   selector: 'app-forumpost-update-dialog',
@@ -16,30 +15,16 @@ export class ForumpostUpdateDialogComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ForumpostUpdateDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) {}
-
-  save(): void {
-    const post: Forumpost = this.PostForm.value;
-    post.postDate = this.data.postDate;
-    post.id = this.data.id;
-    if (this.data.pictureID) {
-      post.pictureID = this.data.pictureID;
-    }
-    if (this.data.description) {
-      post.description = this.data.description;
-    }
-    if (this.data.pictureUrl) {
-      post.pictureUrl = this.data.pictureUrl;
-    }
-    this.dialogRef.close(post);
-  }
-
-  cancel(): void {
-
-    this.dialogRef.close(null);
-  }
+    @Inject(MAT_DIALOG_DATA) public data: any) { }
 
   ngOnInit() {
   }
 
+  save(): void {
+    this.dialogRef.close(this.PostForm.value.newTitle);
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
 }

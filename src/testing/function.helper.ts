@@ -77,17 +77,26 @@ export class FunctionHelper {
 
   getSnapshotChangeDocChangeActions(amount: number): Observable<any[]> {
     for (let i = 0; i < amount; i++) {
+      let data: any;
+      if (i % 2 === 0) {
+        data = {
+          title: 'asd' + i,
+          postDate: 'date' + i,
+          pictureID: 'picID'
+        };
+      } else {
+        data = {
+          title: 'asd' + i,
+          postDate: 'date' + i,
+          description: 'description',
+        };
+      }
       this.actions.push({
         payload: {
           doc: {
             id: 'abc' + i,
             data: () => {
-              return {
-                title: 'asd' + i,
-                postDate: 'date' + i,
-                description: 'description',
-                pictureID: 'picID'
-              };
+              return data;
             }
           }
         }
