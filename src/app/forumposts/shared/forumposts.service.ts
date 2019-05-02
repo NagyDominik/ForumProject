@@ -5,7 +5,6 @@ import { map, switchMap, tap } from 'rxjs/operators';
 import { FileService } from 'src/app/files/shared/file.service';
 
 import { Forumpost } from './forumpost.model';
-import {__values} from 'tslib';
 
 @Injectable({
   providedIn: 'root'
@@ -79,57 +78,51 @@ export class ForumpostsService {
   }
 
   createForumDBEntry(post: Forumpost): Observable<Forumpost> {
-      // console.log('Forum DB entry created: ', post);
-      return from(this.db.collection('forumposts').add(post)).pipe(
-        map(postRef => {
-          post.id = postRef.id;
-          console.log('postRef: ', postRef);
-          console.log('Post after creating db entry: ', post);
-          return post;
-        })
-      );
+    return from(this.db.collection('forumposts').add(post)).pipe(
+      map(postRef => {
+        post.id = postRef.id;
+        console.log('postRef: ', postRef);
+        console.log('Post after creating db entry: ', post);
+        return post;
+      })
+    );
   }
 
   deletePost(id: string): Observable<Forumpost> {
-    return this.db.doc<Forumpost>('forumposts/' + id)
-      .get().pipe(
-        switchMap(postDocument => {
-          if (!postDocument || !postDocument.data()) {
-            throw new Error('Post not found');
-          } else {
-            return from(
-              this.db.doc<Forumpost>('forumposts/' + id)
-                .delete()
-            ).pipe(
-              map(() => {
-                const data = postDocument.data() as Forumpost;
-                data.id = postDocument.id;
-                return data;
-              })
+    return this.db.doc<Forumpost>('forumposts/' + id).get()
+      .pipe(switchMap(postDocument => {
+        if (!postDocument || !postDocument.data()) {
+          throw new Error('Post not found');
+        } else {
+          return from(this.db.doc<Forumpost>('forumposts/' + id).delete())
+            .pipe(map(() => {
+              const data = postDocument.data() as Forumpost;
+              data.id = postDocument.id;
+              return data;
+            })
             );
-          }
-        })
+        }
+      })
       );
   }
 
-  updatePost(post: Forumpost) {
-    console.log(post);
+  updatePost(post: Forumpost): Observable<Forumpost> {
     if (post !== null) {
-      console.log('still going');
-      return this.db.doc<Forumpost>('forumposts/' + post.id)
-        .get().pipe(
-          switchMap(postDoc => {
-            console.log(postDoc);
-            if (!postDoc || !postDoc.data()) {
-              throw new Error('Post not found');
-            } else {
-              return from(
-                this.db.doc<Forumpost>('forumposts/' + post.id).update(post)
+      return this.db.doc<Forumpost>('forumposts/' + post.id).get()
+        .pipe(switchMap(postDoc => {
+          if (!postDoc || !postDoc.data()) {
+            throw new Error('Post not found');
+          } else {
+            return from(this.db.doc<Forumpost>('forumposts/' + post.id).update(post))
+              .pipe(map(() => {
+                const data = postDoc.data() as Forumpost;
+                data.id = postDoc.id;
+                return data;
+              })
               );
-            }
-          })
-        );
-      }
+          }
+        }));
     }
+  }
 
 }
