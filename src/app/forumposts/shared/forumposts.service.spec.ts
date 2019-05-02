@@ -89,6 +89,12 @@ describe('ForumpostsService', () => {
         });
       });
     });
+
+    it('should not call fileservice getFileUrl with no post ID', () => {
+      firestoreCollectionMock.snapshotChanges.and.returnValue(helper.getSnapshotChangeDocChangeActions(1));
+      service.getPostsList().subscribe();
+      expect(fileServiceMock.getFileUrl).toHaveBeenCalledTimes(0);
+    });
   });
 
   describe('createPost', () => {
@@ -97,9 +103,15 @@ describe('ForumpostsService', () => {
       fileServiceMock.uploadImage.and.returnValue(helper.getFSImageUpload());
     });
 
-    it('should be called once ', () => {
+    it('should call firestore once ', () => {
       service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd', description: 'description' }).subscribe();
       expect(firestoreCollectionMock.add).toHaveBeenCalledTimes(1);
+    });
+
+    it('should call createForumDBEntry once', () => {
+      spyOn(service, 'createForumDBEntry').and.returnValue(of('test'));
+      service.createPost({ id: 'asdasd', postDate: 'asdasdas', title: 'asd' }).subscribe();
+      expect(service.createForumDBEntry).toHaveBeenCalledTimes(1);
     });
 
     it('should upload image if there is one ', () => {
