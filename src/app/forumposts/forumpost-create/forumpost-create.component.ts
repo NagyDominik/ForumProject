@@ -39,7 +39,9 @@ export class ForumpostCreateComponent implements OnInit, AfterViewInit {
     this.PostForm.reset();
     this.fileToUpload = null;
   }
-
+/**
+ * Retrieve an image file from the hard drive.
+ */
   setUploadFile(event) {
     if (event.target.files[0].type.includes('image')) {
       this.fileToUpload = event.target.files[0];
@@ -55,6 +57,9 @@ export class ForumpostCreateComponent implements OnInit, AfterViewInit {
     }
   }
 
+  /**
+   * Create a new post with values retrieved from the input form.
+   */
   post() {
     const post: Forumpost = this.PostForm.value;
     if ((post.title != null && post.title !== '') && (this.fileToUpload == null || this.fileToUpload.type.includes('image'))) {

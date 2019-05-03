@@ -18,6 +18,7 @@ import { ForumpostsService } from '../shared/forumposts.service';
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
+
   post: Forumpost;
 
   constructor(private store: Store, public dialog: MatDialog, private service: ForumpostsService) {
@@ -27,6 +28,10 @@ export class ForumpostsListComponent implements OnInit {
   ngOnInit() {
   }
 
+  /**
+   * Open a dialog window that can be used to update an existing post's title.
+   * @param updatePost The post being updated
+   */
   openDialog(updatePost: Forumpost): void {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
@@ -41,8 +46,7 @@ export class ForumpostsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null && result !== '') {
         updatePost.title = result;
-        // this.service.updatePost(updatePost).subscribe();
-        this.store.dispatch(new UpdateForumPost(updatePost));
+        this.store.dispatch(new UpdateForumPost(updatePost)); // If the user didn't cancel the update, dispatch a new NGXS action
       }
     });
 
