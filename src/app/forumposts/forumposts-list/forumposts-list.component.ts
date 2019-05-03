@@ -7,8 +7,6 @@ import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 
 import { ForumpostUpdateDialogComponent } from '../forumpost-update-dialog/forumpost-update-dialog.component';
 import { Forumpost } from '../shared/forumpost.model';
-import { ForumpostsService } from '../shared/forumposts.service';
-
 
 @Component({
   selector: 'app-forumposts-list',
@@ -20,7 +18,7 @@ export class ForumpostsListComponent implements OnInit {
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
   post: Forumpost;
 
-  constructor(private store: Store, public dialog: MatDialog, private service: ForumpostsService) {
+  constructor(private store: Store, public dialog: MatDialog) {
     this.store.dispatch(new LoadForumPosts());
   }
 
@@ -41,11 +39,9 @@ export class ForumpostsListComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       if (result != null && result !== '') {
         updatePost.title = result;
-        // this.service.updatePost(updatePost).subscribe();
         this.store.dispatch(new UpdateForumPost(updatePost));
       }
     });
-
   }
 
   deleteForumPost(forumPost: Forumpost) {

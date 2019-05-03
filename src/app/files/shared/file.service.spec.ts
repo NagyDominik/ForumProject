@@ -37,7 +37,7 @@ describe('FileService', () => {
 
   describe('uploadImage', () => {
     beforeEach(() => {
-      firestorageRefMock.put.and.returnValue(new Promise((resolve) => of('Test')));
+      firestorageRefMock.put.and.returnValue(helper.getPromiseMock());
       angularFirestoreMock.createId.and.returnValue('testID');
     });
 

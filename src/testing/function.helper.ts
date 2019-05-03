@@ -1,5 +1,6 @@
 import { Observable, of } from 'rxjs';
 import { FileMeta } from 'src/app/files/shared/file-meta.model';
+import { Forumpost } from 'src/app/forumposts/shared/forumpost.model';
 import { User } from 'src/app/users/shared/user.model';
 
 export class FunctionHelper {
@@ -139,5 +140,24 @@ export class FunctionHelper {
       lastModified: 1505948,
       type: 'image/png',
     });
+  }
+
+  getForumpostMock(pic: boolean): Forumpost {
+    const post: Forumpost = {
+      id: 'asdasd',
+      postDate: 'asdasdas',
+      title: 'asd'
+    };
+    if (pic) {
+      post.pictureID = 'picID';
+      return post;
+    } else {
+      post.description = 'description';
+      return post;
+    }
+  }
+
+  getPromiseMock(): Promise<void> {
+    return new Promise((resolve) => {});
   }
 }

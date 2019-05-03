@@ -42,15 +42,17 @@ export class ForumpostsService {
 
   getAllPosts(): Observable<Forumpost[]> {
     return this.getPostsList()
-      .pipe(tap(posts => {
-        posts.forEach(post => {
-          if (post.pictureID) {
-            this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
-              post.pictureUrl = url;
-            });
-          }
-        });
-      }));
+      .pipe(
+        tap(posts => {
+          posts.forEach(post => {
+            if (post.pictureID) {
+              this.fs.getFileUrl(post.pictureID, 'forum').subscribe(url => {
+                post.pictureUrl = url;
+              });
+            }
+          });
+        })
+      );
   }
 
   getPostsList() {
@@ -89,39 +91,43 @@ export class ForumpostsService {
   }
 
   deletePost(id: string): Observable<Forumpost> {
-    return this.db.doc<Forumpost>('forumposts/' + id).get()
-      .pipe(switchMap(postDocument => {
+    return this.db.doc<Forumpost>('forumposts/' + id).get().pipe(
+      switchMap(postDocument => {
         if (!postDocument || !postDocument.data()) {
           throw new Error('Post not found');
         } else {
-          return from(this.db.doc<Forumpost>('forumposts/' + id).delete())
-            .pipe(map(() => {
+          return from(this.db.doc<Forumpost>('forumposts/' + id).delete()).pipe(
+            map(() => {
               const data = postDocument.data() as Forumpost;
               data.id = postDocument.id;
               return data;
             })
-            );
+          );
         }
       })
-      );
+    );
   }
 
   updatePost(post: Forumpost): Observable<Forumpost> {
-    if (post !== null) {
-      return this.db.doc<Forumpost>('forumposts/' + post.id).get()
-        .pipe(switchMap(postDoc => {
+    if (post != null) {
+      return this.db.doc<Forumpost>('forumposts/' + post.id).get().pipe(
+        switchMap(postDoc => {
           if (!postDoc || !postDoc.data()) {
             throw new Error('Post not found');
           } else {
-            return from(this.db.doc<Forumpost>('forumposts/' + post.id).update(post))
-              .pipe(map(() => {
+            return from(this.db.doc<Forumpost>('forumposts/' + post.id).update(post)).pipe(
+              map(() => {
                 const data = postDoc.data() as Forumpost;
                 data.id = postDoc.id;
+                data.title = post.title;
                 return data;
               })
-              );
+            );
           }
-        }));
+        })
+      );
+    } else {
+      return Observable.create(() => { throw new Error('Update data cannot be null'); });
     }
   }
 

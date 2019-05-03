@@ -8,11 +8,12 @@ import { ForumpostsListComponent } from './forumposts-list.component';
 import { NgxsTestPlugin, NGXS_ACTIONS } from 'src/testing/NgxsTestPlugin';
 import { ForumpostsState } from 'src/app/store/state/forumposts.state';
 import { NgModule } from '@angular/core';
+import { DOMHelper } from 'src/testing/dom-helper';
 
 describe('ForumpostsListComponent', () => {
   let component: ForumpostsListComponent;
   let fixture: ComponentFixture<ForumpostsListComponent>;
-  // let dh: DOMHelper<ForumpostsListComponent>;
+  let dh: DOMHelper<ForumpostsListComponent>;
   let forumPostServiceMock: any;
 
   beforeEach(async(() => {
@@ -39,6 +40,7 @@ describe('ForumpostsListComponent', () => {
       .compileComponents().then(() => {
         fixture = TestBed.createComponent(ForumpostsListComponent);
         component = fixture.componentInstance;
+        dh = new DOMHelper(fixture);
         fixture.detectChanges();
       });
 
