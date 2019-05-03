@@ -53,10 +53,10 @@ exports.uploadImage = functions.storage.object().onFinalize((object) => {
     });
 });
 
-exports.deletePost = functions.firestore.document('forumposts/{ID}').onDelete((snap) => {
+exports.deletePostCleanUp = functions.firestore.document('forumposts/{ID}').onDelete((snap) => {
     return new Promise(async (resolve, reject) => {
         const deletedPost = snap.data();
-        if (deletedPost) {
+        if (deletedPost && deletedPost.pictureID) {
             await deleteFileMeta(deletedPost.pictureID)
                 .catch(error => {
                     reject('File metadata could not be deleted: ' + error);
@@ -74,13 +74,16 @@ exports.deletePost = functions.firestore.document('forumposts/{ID}').onDelete((s
             } catch (error) {
                 reject(error);
             }
+        } else if (deletedPost && !deletedPost.pictureID) {
+            resolve();
+            console.log('A post without picture has been deleted! PostID: ' + snap.id);
         } else {
             reject('Post could not be deleted');
         }
     });
 });
 
-exports.deleteOldProfilePicture = functions.firestore.document('users/{userID}').onUpdate((change, context) => {
+exports.profilePictureChangeCleanUp = functions.firestore.document('users/{userID}').onUpdate((change, context) => {
     return new Promise(async (resolve, reject) => {
         if (change.before && change.before.data()) {
             const beforeData = change.before.data();
