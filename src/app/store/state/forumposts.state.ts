@@ -79,47 +79,23 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPost)
     AddForumPost({dispatch}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPost) {
-        /*return this.fps.createPost(payload.post, payload.file).pipe(
-        map((post: Forumpost) =>
-            asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
-        )),
-        catchError(error =>
-            of(
-                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
+        return this.fps.createPost(payload.post, payload.file).pipe(
+            map((post: Forumpost) =>
+                asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
+            )),
+            catchError(error =>
+                of(
+                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
+                )
             )
-        )
-        );*/
-        if (payload.file) {
-            return this.fps.createPostWithImage(payload.post, payload.file).pipe(
-                map((post: Forumpost) =>
-                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
-                )),
-                catchError(error =>
-                    of(
-                        asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
-                    )
-                )
-                );
-        } else {
-            return this.fps.createPost(payload.post).pipe(
-                map((post: Forumpost) =>
-                    asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostSuccess(post))
-                )),
-                catchError(error =>
-                    of(
-                        asapScheduler.schedule(() => dispatch(new forumpostsActions.AddForumPostFail(error)))
-                    )
-                )
             );
-        }
     }
 
     @Action(forumpostsActions.AddForumPostSuccess)
     addForumPostSuccess({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPostSuccess) {
-        console.log('Added Post');
         const state = getState();
         patchState({
-            forumposts: [...state.forumposts, payload]
+            forumposts: [...state.forumposts, payload] // Insert the newly created post into the state
         });
     }
 
@@ -153,7 +129,7 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.DeleteForumPostFail)
     deleteForumPostFail({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.DeleteForumPostFail) {
-
+        // Notify the user that it failed?
     }
 
     // Update forumpost

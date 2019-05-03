@@ -29,6 +29,10 @@ export class ForumpostsListComponent implements OnInit {
     this.dialogConfig.autoFocus = true;
   }
 
+  /**
+   * Open a dialog window that can be used to update an existing post's title.
+   * @param updatePost The post being updated
+   */
   openDialog(updatePost: Forumpost): void {
     this.dialogRef = this.dialog.open(ForumpostUpdateDialogComponent, {
       data: updatePost,
@@ -39,7 +43,7 @@ export class ForumpostsListComponent implements OnInit {
     this.dialogRef.afterClosed().subscribe(result => {
       if (result != null && result !== '') {
         updatePost.title = result;
-        this.store.dispatch(new UpdateForumPost(updatePost));
+        this.store.dispatch(new UpdateForumPost(updatePost)); // If the user didn't cancel the update, dispatch a new NGXS action
       }
     });
   }
