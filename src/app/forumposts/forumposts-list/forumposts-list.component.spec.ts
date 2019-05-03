@@ -1,28 +1,37 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatButtonModule, MatCardModule, MatIconModule, MatMenuModule, MatSnackBarModule, MatDialogModule } from '@angular/material';
-import { NGXS_PLUGINS, NgxsModule, getActionTypeFromInstance } from '@ngxs/store';
-import { of } from 'rxjs';
-
-import { ForumpostsService } from '../shared/forumposts.service';
-import { ForumpostsListComponent } from './forumposts-list.component';
-import { NgxsTestPlugin, NGXS_ACTIONS } from 'src/testing/NgxsTestPlugin';
-import { ForumpostsState } from 'src/app/store/state/forumposts.state';
-import { NgModule } from '@angular/core';
+import {
+  MatButtonModule,
+  MatCardModule,
+  MatDialogModule,
+  MatIconModule,
+  MatMenuModule,
+  MatSnackBarModule,
+  MatDialog,
+} from '@angular/material';
+import { NgxsModule, Store } from '@ngxs/store';
+import { LoadForumPosts, UpdateForumPost, DeleteForumPost } from 'src/app/store/actions/forumposts.actions';
 import { DOMHelper } from 'src/testing/dom-helper';
+
+import { ForumpostsListComponent } from './forumposts-list.component';
+import { FunctionHelper } from 'src/testing/function.helper';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('ForumpostsListComponent', () => {
   let component: ForumpostsListComponent;
   let fixture: ComponentFixture<ForumpostsListComponent>;
-  let dh: DOMHelper<ForumpostsListComponent>;
-  let forumPostServiceMock: any;
+  let helper: FunctionHelper;
+  let storeMock: any;
+  let dialogMock: any;
 
   beforeEach(async(() => {
-    forumPostServiceMock = jasmine.createSpyObj('ForumpostsService', ['getAllPosts']);
-    forumPostServiceMock.getAllPosts.and.returnValue(of([]));
+    storeMock = jasmine.createSpyObj('Store', ['dispatch', 'select']);
+    dialogMock = jasmine.createSpyObj('MatDialog', ['open']);
+    helper = new FunctionHelper();
 
     TestBed.configureTestingModule({
       declarations: [ForumpostsListComponent],
       imports: [
+        BrowserAnimationsModule,
         MatCardModule,
         MatIconModule,
         MatButtonModule,
@@ -32,28 +41,53 @@ describe('ForumpostsListComponent', () => {
         NgxsModule.forRoot([])
       ],
       providers: [
-        { provide: ForumpostsService, useValue: forumPostServiceMock },
-        { provide: NGXS_PLUGINS, useClass: NgxsTestPlugin, multi: true},
-        { provide: NGXS_ACTIONS, useValue: []}
+        { provide: Store, useValue: storeMock },
+        { provide: MatDialog, useValue: dialogMock }
       ]
     })
       .compileComponents().then(() => {
         fixture = TestBed.createComponent(ForumpostsListComponent);
         component = fixture.componentInstance;
-        dh = new DOMHelper(fixture);
         fixture.detectChanges();
       });
 
-    }));
+  }));
 
-     it('should create', () => {
-       expect(component).toBeTruthy();
-     });
+  it('should create', () => {
+    expect(component).toBeTruthy();
+  });
 
-     it('should select the forumposts', () => {
-       const actions = TestBed.get(NGXS_ACTIONS);
-       expect(getActionTypeFromInstance(actions[1])).toEqual('[Forumposts] Load Forumposts');
-     });
+  it('should load the forumposts', () => {
+    expect(storeMock.dispatch).toHaveBeenCalledWith(new LoadForumPosts());
+    expect(storeMock.dispatch).toHaveBeenCalledTimes(1);
+  });
+
+  describe('openDialog', () => {
+    it('should call dialog.open once', () => {
+      dialogMock.open.and.returnValue(helper.getDialogReferenceMock(true));
+      const updatePost = helper.getForumpostMock(true);
+      component.openDialog(updatePost);
+      expect(dialogMock.open).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not do anything if afterClosed result is null', () => {
+      dialogMock.open.and.returnValue(helper.getDialogReferenceMock(false));
+      const updatePost = helper.getForumpostMock(true);
+      component.openDialog(updatePost);
+      expect(storeMock.dispatch).not.toHaveBeenCalledWith(new UpdateForumPost(updatePost));
+    });
+
+  });
+
+  describe('deleteForumpost', () => {
+    it('should call store.dispatch once', () => {
+      storeMock.dispatch.calls.reset();
+      const deletePost = helper.getForumpostMock(false);
+      component.deleteForumPost(deletePost);
+      expect(storeMock.dispatch).toHaveBeenCalledTimes(1);
+      expect(storeMock.dispatch).toHaveBeenCalledWith(new DeleteForumPost(deletePost));
+    });
+  });
 
 });
 

@@ -158,6 +158,18 @@ export class FunctionHelper {
   }
 
   getPromiseMock(): Promise<void> {
-    return new Promise((resolve) => {});
+    return new Promise((resolve) => { });
+  }
+
+  getDialogReferenceMock(result: boolean): any {
+    let obs: any = of(null);
+    if (result) {
+      obs = of('Updated Test Title');
+    }
+    return {
+      afterClosed: () => {
+        return obs;
+      }
+    };
   }
 }

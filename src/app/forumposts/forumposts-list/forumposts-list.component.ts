@@ -16,27 +16,27 @@ import { Forumpost } from '../shared/forumpost.model';
 export class ForumpostsListComponent implements OnInit {
 
   @Select(ForumpostsState.forumposts) forumposts: Observable<Forumpost[]>;
-  post: Forumpost;
+  dialogConfig: MatDialogConfig;
+  dialogRef: any;
 
   constructor(private store: Store, public dialog: MatDialog) {
     this.store.dispatch(new LoadForumPosts());
   }
 
   ngOnInit() {
+    this.dialogConfig = new MatDialogConfig();
+    this.dialogConfig.disableClose = true;
+    this.dialogConfig.autoFocus = true;
   }
 
   openDialog(updatePost: Forumpost): void {
-    const dialogConfig = new MatDialogConfig();
-    dialogConfig.disableClose = true;
-    dialogConfig.autoFocus = true;
-
-    const dialogRef = this.dialog.open(ForumpostUpdateDialogComponent, {
+    this.dialogRef = this.dialog.open(ForumpostUpdateDialogComponent, {
       data: updatePost,
       disableClose: true,
       autoFocus: true,
     });
 
-    dialogRef.afterClosed().subscribe(result => {
+    this.dialogRef.afterClosed().subscribe(result => {
       if (result != null && result !== '') {
         updatePost.title = result;
         this.store.dispatch(new UpdateForumPost(updatePost));
