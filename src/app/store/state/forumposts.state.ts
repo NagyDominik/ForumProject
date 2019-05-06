@@ -93,10 +93,14 @@ export class ForumpostsState {
 
     @Action(forumpostsActions.AddForumPostSuccess)
     addForumPostSuccess({getState, patchState}: StateContext<ForumpostsModel>, {payload}: forumpostsActions.AddForumPostSuccess) {
-        const state = getState();
+        /**const state = getState();
+        debugger;
         patchState({
             forumposts: [...state.forumposts, payload] // Insert the newly created post into the state
-        });
+        });**/
+
+        // tslint:disable-next-line:max-line-length
+        // Adding the post to the state causes it to appear two times, since after creating the post, the list component is loaded, which retrieves all the posts (including the newly created one).
     }
 
     @Action(forumpostsActions.AddForumPostFail)
