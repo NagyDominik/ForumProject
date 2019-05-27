@@ -29,7 +29,7 @@ export class ForumpostsService {
    * Creates a text post with the current time appended.
    * @param post The post that will be saved.
    */
-  private createTextPost(post: Forumpost): Observable<Forumpost> {
+  createTextPost(post: Forumpost): Observable<Forumpost> {
     const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
@@ -47,7 +47,7 @@ export class ForumpostsService {
  * @param post The post (only title).
  * @param file The image that will be saved.
  */
-  private createPostWithImage(post: Forumpost, file: File): Observable<Forumpost> {
+  createPostWithImage(post: Forumpost, file: File): Observable<Forumpost> {
     const postProcessed: Forumpost = {
       title: post.title,
       postDate: new Date(Date.now()).toISOString()
@@ -83,7 +83,7 @@ export class ForumpostsService {
   /**
    * Rettrieve a list of forumpost, without the picture URL.
    */
-  private getPostsList() {
+  getPostsList() {
     return this.db.collection<Forumpost>('forumposts', ref => ref.orderBy('postDate', 'desc'))
       .snapshotChanges()
       .pipe(

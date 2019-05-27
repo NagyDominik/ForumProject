@@ -104,13 +104,14 @@ describe('ForumpostsService', () => {
     });
 
     it('should call firestore once', () => {
-      service.createPost(helper.getForumpostMock(false)).subscribe();
+      const tempFile = helper.getFileMock();
+      service.createPost(helper.getForumpostMock(false), tempFile).subscribe();
       expect(firestoreCollectionMock.add).toHaveBeenCalledTimes(1);
     });
 
     it('should call createForumDBEntry once', () => {
       spyOn(service, 'createForumDBEntry').and.returnValue(of('test'));
-      service.createPost(helper.getForumpostMock(true)).subscribe();
+      service.createPost(helper.getForumpostMock(true), null).subscribe();
       expect(service.createForumDBEntry).toHaveBeenCalledTimes(1);
     });
 
